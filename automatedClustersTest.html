@@ -1,0 +1,2822 @@
+<html lang="en">
+<head>
+	<base target="_top">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	
+	<title>Quick Start - Leaflet</title>
+	
+	<link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
+  <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
+    
+
+	<style>
+		html, body {
+		height: 100vh;
+	    margin: 0;
+        font-family: lato;
+		}
+
+        #map {
+            width: 800px; 
+            height: 700px;
+        }
+
+        span:hover {
+            color: #C18D0C;
+        }
+
+        button:hover {
+            background-color: #C18D0C;
+        }
+
+		.leaflet-container {
+			min-height: 700px;
+			min-width: 800px;
+			max-width: 100vw;
+			max-height: 100vh;
+		}
+
+  .leaflet-popup-content {
+    line-height: 1.5;
+  }
+
+    #historical {
+      color:  #D38E00;
+    }
+
+    #grotte {
+      color: #846767;
+    }
+
+    #musee {
+      color: #CD460D;
+    }
+
+    #vin {
+      color: #A51E33;
+    }
+
+    #parc {
+      color: #48743E;
+    }
+
+    #gallo {
+      color: #9f6800;
+    }
+
+    #detour, #charme {
+      color: #292972;
+    }
+
+    .flex-section-div {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .flex-section-image-div > a > img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+
+    .leaflet-container a {
+      color: #a51d34 !important;
+      text-decoration: none;
+      font-size: 0.8rem;
+    }
+
+  
+
+    .flex-section-image-div {
+      width: 80%;
+    }
+
+    .flex-section-text-div-list-section > ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .flex-section-text-div {
+      width: 100%;
+    }
+
+    .know-more-button {
+      background-color: #a71d34;
+      color: white;
+      border: none;
+      padding: 8px;
+      font-size: 0.6rem;
+    }
+
+    .flex-section-text-div-button-section {
+      text-align: right;
+    }
+
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 48px;
+  height: 28px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + #grotte {
+  background-color:#846767;
+}
+
+input:focus + #grotte {
+  box-shadow: 0 0 1px #846767;
+}
+
+input:checked + #musees {
+  background-color: #CD460D;
+}
+
+input:focus + #musees {
+  box-shadow: 0 0 1px #CD460D;
+}
+
+input:checked + #monuments {
+  background-color: #D38E00;
+}
+
+input:focus + #monuments {
+  box-shadow: 0 0 1px #D38E00;
+}
+
+input:checked + #gallo {
+  background-color: #9f6800;
+}
+
+input:focus + #gallo {
+  box-shadow: 0 0 1px #9f6800;
+}
+
+input:checked + #parc {
+  background-color: #48743E;
+}
+
+input:focus + #parc {
+  box-shadow: 0 0 1px #48743E;
+}
+
+input:checked + #vin {
+  background-color: #A51E33;
+}
+
+input:focus + #vin {
+  box-shadow: 0 0 1px #A51E33;
+}
+
+input:checked + #detour {
+  background-color: #292972;
+}
+
+input:focus + #detour {
+  box-shadow: 0 0 1px #292972;
+}
+
+
+input:checked + #charme {
+  background-color: #292972;
+}
+
+input:focus + #charme {
+  box-shadow: 0 0 1px #292972;
+}
+
+
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+.filter_group {
+  display: flex;
+}
+
+.filter_toggle_group {
+  display: flex;
+  align-items: center;
+}
+
+.filter_toggle_group_boundary {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: 20%;
+}
+
+.filter_toggle_group_boundary p {
+  text-align: center;
+  margin-top: 0;
+}
+
+.filter_img {
+  height: 50px;
+  width: 50px;
+}
+
+#uncheck-all-group {
+  justify-content: center;
+}
+
+.filter-section {
+  margin-right: 20px;
+  margin-left: 20px;
+  margin-top: 20px;
+}
+
+.main-section {
+  display: flex;
+}
+
+#list, #list_container {
+  max-height: 700px;
+  overflow: scroll;
+  flex: 1;
+}
+
+#list_container {
+    height: 800px;
+    overflow-y: auto;
+    padding: 0 10px 0 20px;
+    overflow-x: hidden;
+}
+
+.list_item {
+  display: none;
+  height: 120px;
+  margin-bottom: 10px;
+  background-color: #fafafa;
+  box-shadow: #0000002b 3px 3px 5px;
+  padding-right: 15px;
+  text-decoration: none;
+}
+
+.row {
+    display: flex;
+    margin-right: -15px;
+    margin-left: -15px;
+}
+
+.image-section {
+    min-width: 30%;
+    background-size: cover;
+    height: 120px;
+}
+
+.list_item .content_part {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-left: 10px;
+    padding-bottom: 10px;
+}
+
+
+.list_item .taxonomy_pictos .filter_img {
+    width: 40px;
+    height: 40px;
+}
+
+.list_item h4 {
+    margin-top: 0px;
+    margin-bottom: 0px;
+    font-size: 16px;
+    line-height: 20px;
+    transition: 0.4s all;
+    color: #1a171b;
+    font-weight: 500;
+    overflow-wrap: break-word;
+}
+
+.list_item .bottom_part {
+    font-size: 13px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    color: #1a171b;
+}
+
+.map-title {
+    text-align: center;
+    margin-top: 40px;
+    font-weight: 600;
+    color: #a51d34;
+}
+
+.marker-cluster-small div, .marker-cluster-small {
+	background-color: rgba(193, 141, 12, 0.6);
+}
+
+
+
+@media only screen and (max-width: 900px) {
+    .main-section {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    }
+
+    .filter-section {
+        display: flex;
+        justify-content: center;
+    }
+
+    .filter_group {
+    flex-direction: column;
+    }
+
+    .filter_toggle_group_boundary {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    width: 100%;
+}
+
+.filter_toggle_group_boundary p {
+    margin-bottom: 0px;
+    margin-left: 10px;
+}
+
+#list {
+    justify-self: center;
+}
+
+.leaflet-container {
+	min-height: 350px;
+	min-width: 400px;
+
+}
+
+#map {
+    height: 350px;
+    width: 100vw; 
+}
+
+}
+
+
+	</style>
+
+	
+</head>
+<body>
+
+<h1 class="map-title">LA CARTE INTERACTIVE</h1>    
+
+<div class="filter-section">
+
+    <div class="filter_group">
+    
+    <div class="filter_toggle_group_boundary" id="uncheck-all-group">
+      <div class="filter_toggle_group">
+        <label class="switch">
+          <input type="checkbox" id="tout" class="checkbox-input" checked>
+          <span class="slider round" id="tout"></span>
+      </label>
+      </div>
+      <p>Tout déchocher</p>
+    </div>
+
+    <div class="filter_toggle_group_boundary">
+      <div class="filter_toggle_group">
+        <label for="monuments">
+          <img class="filter_img" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Monuments.png">
+        </label> 
+        <label class="switch">
+          <input type="checkbox" id="monuments" class="checkbox-input" checked>
+          <span class="slider round" id="monuments"></span>
+      </label>
+      </div>
+      <p>Monuments</p>
+    </div>
+
+
+    <div class="filter_toggle_group_boundary">
+      <div class="filter_toggle_group">
+        <label for="gallo">
+          <img class="filter_img" src="https://www.sitesdexception.fr/wp-content/uploads/2025/12/romains.png">
+        </label> 
+        <label class="switch">
+          <input type="checkbox" id="gallo" class="checkbox-input" checked>
+          <span class="slider round" id="gallo"></span>
+      </label>
+      </div>
+      <p>Sites et musées Gallo-romains</p>
+    </div>
+
+
+    <div class="filter_toggle_group_boundary">
+      <div class="filter_toggle_group">
+        <label for="musees">
+          <img class="filter_img" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Musees.png">
+        </label> 
+        <label class="switch">
+          <input type="checkbox" id="musees" class="checkbox-input" checked>
+          <span class="slider round" id="musees"></span>
+      </label>
+      </div>
+      <p>Musées d'art et de société</p>
+    </div>
+
+
+      <div class="filter_toggle_group_boundary">
+        <div class="filter_toggle_group">
+          <label for="grotte">
+            <img class="filter_img" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Sites-geologiques.png">
+          </label>
+          <label class="switch">
+            <input type="checkbox" id="grotte" class="checkbox-input" checked>
+            <span class="slider round" id="grotte"></span>
+          </label>
+        </div>
+        <p>Sites géologiques</p>
+      </div>
+    
+    
+    
+      <div class="filter_toggle_group_boundary">
+        <div class="filter_toggle_group">
+          <label for="parc">
+            <img class="filter_img" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Parcs-jardins.png">
+          </label>
+          <label class="switch">
+            <input type="checkbox" id="parc" class="checkbox-input" checked>
+            <span class="slider round" id="parc"></span>
+          </label>
+        </div>
+        <p>Parcs & jardins</p>
+      </div>
+    
+    
+      <div class="filter_toggle_group_boundary">
+        <div class="filter_toggle_group">
+          <label for="vin">
+            <img class="filter_img" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Vin.png">
+          </label>
+          <label class="switch">
+            <input type="checkbox" id="vin" class="checkbox-input" checked>
+            <span class="slider round" id="vin"></span>
+          </label>
+        </div>
+        <p>Vins & savoir-faire</p>
+      </div>
+    
+    
+      <div class="filter_toggle_group_boundary">
+        <div class="filter_toggle_group">
+          <label for="detour">
+            <img class="filter_img" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Ca-vaut-le-detour.png">
+          </label>
+          <label class="switch">
+            <input type="checkbox" id="detour" class="checkbox-input">
+            <span class="slider round" id="detour"></span>
+          </label>
+        </div>
+        <p>Ça vaut le détour</p>
+      </div>
+    
+    
+      <div class="filter_toggle_group_boundary">
+        <div class="filter_toggle_group">
+          <label for="charme">
+            <img class="filter_img" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Hebergements.png">
+          </label>
+          <label class="switch">
+            <input type="checkbox" id="charme" class="checkbox-input">
+            <span class="slider round" id="charme"></span>
+          </label>
+        </div>
+        <p>Hébergements de charme</p>
+      </div>
+    
+    </div>
+
+</div> 
+
+<div class="main-section">
+  <div id="map"></div>
+  
+ <div id="list">
+    <div id="list_container">
+
+
+<a href="https://www.sitesdexception.fr/sites/abbaye-de-fontcaude/" class="list_item">
+    <div class="row">
+        <div style="background-image: url('https://www.sitesdexception.fr/wp-content/uploads/2025/01/Abbaye-de-Fontcaude-©Arnaud-Commune-6-1.png')" class="image-section"></div>
+        <div class="content_part">
+            <h4>
+                <span>Abbaye de Fontcaude</span>
+                <div class="taxonomy_pictos">
+                                            <img class="filter_img monuments-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Monuments.png" alt="Monuments">
+                                    </div>
+            </h4>
+
+            <div class="bottom_part">
+                <div class="localization_part">
+                                            <div>
+                            <span class="localization">Cazedarnes</span>
+                        </div>
+                                                                <div>
+                            <span class="zone-geo">Béziers – Canal du Midi</span>
+                        </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</a>
+
+<a href="https://www.sitesdexception.fr/sites/abbaye-de-fontfroide/" class="list_item">
+    <div class="row">
+        <div style="background-image: url('https://www.sitesdexception.fr/wp-content/uploads/2025/12/Abbaye-de-FontfroideABBAYE-DE-FONTFROIDE-Yann-Monel.jpg')" class="image-section"></div>
+        <div class="content_part">
+            <h4>
+                <span>Abbaye de Fontfroide</span>
+                <div class="taxonomy_pictos">
+                                            <img class="filter_img monuments-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Monuments.png" alt="Monuments">
+                                            <img class="filter_img vin-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Vin.png" alt="Vins & savoir-faire">
+                                    </div>
+            </h4>
+
+            <div class="bottom_part">
+                <div class="localization_part">
+                                            <div>
+                            <span class="localization">Narbonne</span>
+                        </div>
+                                                                <div>
+                            <span class="zone-geo">Narbonne</span>
+                        </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</a>
+
+<a href="https://www.sitesdexception.fr/sites/abbaye-medievale-de-lagrasse/" class="list_item">
+    <div class="row">
+        <div style="background-image: url('https://www.sitesdexception.fr/wp-content/uploads/2023/11/L1310150-copie.jpg')" class="image-section"></div>
+        <div class="content_part">
+            <h4>
+                <span>Abbaye médiévale de Lagrasse</span>
+                <div class="taxonomy_pictos">
+                                            <img class="filter_img monuments-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Monuments.png" alt="Monuments">
+                                    </div>
+            </h4>
+
+            <div class="bottom_part">
+                <div class="localization_part">
+                                            <div>
+                            <span class="localization">Lagrasse</span>
+                        </div>
+                                                                <div>
+                            <span class="zone-geo">Aude</span>
+                        </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</a>
+
+<a href="https://www.sitesdexception.fr/sites/abbaye-de-sylvanes/" class="list_item">
+    <div class="row">
+        <div style="background-image: url('https://www.sitesdexception.fr/wp-content/uploads/2019/03/IMG_8828-1.jpg')" class="image-section"></div>
+        <div class="content_part">
+            <h4>
+                <span>Abbaye de Sylvanès</span>
+                <div class="taxonomy_pictos">
+                                            <img class="filter_img monuments-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Monuments.png" alt="Monuments">
+                                    </div>
+            </h4>
+
+            <div class="bottom_part">
+                <div class="localization_part">
+                                            <div>
+                            <span class="localization">Sylvanès</span>
+                        </div>
+                                                                <div>
+                            <span class="zone-geo">Sud Aveyron</span>
+                        </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</a>
+
+
+
+<a href="https://www.sitesdexception.fr/sites/abbaye-de-valmagne/" class="list_item">
+    <div class="row">
+        <div style="background-image: url('https://www.sitesdexception.fr/wp-content/uploads/2018/04/Abbaye_de_Valmagne_Credit_Emidio_Castri-2.jpg')" class="image-section"></div>
+        <div class="content_part">
+            <h4>
+                <span>Abbaye de Valmagne</span>
+                <div class="taxonomy_pictos">
+                                            <img class="filter_img monuments-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Monuments.png" alt="Monuments">
+                                            <img class="filter_img vin-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Vin.png" alt="Vins & savoir-faire">
+                                            <img class="filter_img parc-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Parcs-jardins.png" alt="Parcs & jardins">
+                                    </div>
+            </h4>
+
+            <div class="bottom_part">
+                <div class="localization_part">
+                                            <div>
+                            <span class="localization">Villeveyrac</span>
+                        </div>
+                                                                <div>
+                            <span class="zone-geo">Autour du Bassin de Thau</span>
+                        </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</a>
+
+
+<a href="https://www.sitesdexception.fr/sites/abimes-de-bramabiau-riviere-souterraine/" class="list_item">
+    <div class="row">
+        <div style="background-image: url('https://www.sitesdexception.fr/wp-content/uploads/2021/12/Bramabiau-2024.jpeg')" class="image-section"></div>
+        <div class="content_part">
+            <h4>
+                <span>Abîme de Bramabiau – Grotte et rivière souterraine</span>
+                <div class="taxonomy_pictos">
+                                    <img class="filter_img grotte-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Sites-geologiques.png" alt="Sites géologiques">
+                                    </div>
+            </h4>
+
+            <div class="bottom_part">
+                <div class="localization_part">
+                                            <div>
+                            <span class="localization">Saint Sauveur Camprieu</span>
+                        </div>
+                                                                <div>
+                            <span class="zone-geo">Gard Cévennes</span>
+                        </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</a>
+
+<a href="https://www.sitesdexception.fr/sites/site-archeologique-et-musee-dambrussum/" class="list_item">
+    <div class="row">
+        <div style="background-image: url('https://www.sitesdexception.fr/wp-content/uploads/2018/04/©vincent-Lauras-Nature-Passion-2.jpg')" class="image-section"></div>
+        <div class="content_part">
+            <h4>
+                <span>Ambrussum – Site et musée archéologique</span>
+                <div class="taxonomy_pictos">
+                                            <img class="filter_img gallo-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/12/romains.png" alt="Sites et musées Gallo-romains">
+                                    </div>
+            </h4>
+
+            <div class="bottom_part">
+                <div class="localization_part">
+                                            <div>
+                            <span class="localization">Villetelle</span>
+                        </div>
+                                                                <div>
+                            <span class="zone-geo">Autour de Montpellier</span>
+                        </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</a>
+
+<a href="https://www.sitesdexception.fr/sites/arenes-de-nimes/" class="list_item">
+    <div class="row">
+        <div style="background-image: url('https://www.sitesdexception.fr/wp-content/uploads/2019/02/©-La-Poze-2.jpg')" class="image-section"></div>
+        <div class="content_part">
+            <h4>
+                <span>Arènes de Nîmes</span>
+                <div class="taxonomy_pictos">
+                                            <img class="filter_img monuments-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Monuments.png" alt="Monuments">
+                                            <img class="filter_img gallo-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/12/romains.png" alt="Sites et musées Gallo-romains">
+                                    </div>
+            </h4>
+
+            <div class="bottom_part">
+                <div class="localization_part">
+                                            <div>
+                            <span class="localization">Nîmes</span>
+                        </div>
+                                                                <div>
+                            <span class="zone-geo">Nîmes</span>
+                        </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</a>
+
+
+<a href="https://www.sitesdexception.fr/sites/la-bambouseraie-en-cevennes/" class="list_item">
+    <div class="row">
+        <div style="background-image: url('https://www.sitesdexception.fr/wp-content/uploads/2019/01/IMG_1310-e1637230369802.jpg')" class="image-section"></div>
+        <div class="content_part">
+            <h4>
+                <span>Bambouseraie en Cévennes</span>
+                <div class="taxonomy_pictos">
+                                            <img class="filter_img parc-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Parcs-jardins.png" alt="Parcs & jardins">
+                                    </div>
+            </h4>
+
+            <div class="bottom_part">
+                <div class="localization_part">
+                                            <div>
+                            <span class="localization">Générargues</span>
+                        </div>
+                                                                <div>
+                            <span class="zone-geo">Gard Cévennes</span>
+                        </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</a>
+
+
+<a href="https://www.sitesdexception.fr/sites/chateau-abbaye-de-cassan/" class="list_item">
+    <div class="row">
+        <div style="background-image: url('https://www.sitesdexception.fr/wp-content/uploads/2018/04/untitled-7437.jpg')" class="image-section"></div>
+        <div class="content_part">
+            <h4>
+                <span>Château-Abbaye de Cassan</span>
+                <div class="taxonomy_pictos">
+                                            <img class="filter_img monuments-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Monuments.png" alt="Monuments">
+                                    </div>
+            </h4>
+
+            <div class="bottom_part">
+                <div class="localization_part">
+                                            <div>
+                            <span class="localization">Roujan</span>
+                        </div>
+                                                                <div>
+                            <span class="zone-geo">Autour de Pézenas</span>
+                        </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</a>
+
+<a href="https://www.sitesdexception.fr/membres_associes/chateau-les-carrasses/" class="list_item">
+    <div class="row">
+        <div style="background-image: url('https://www.sitesdexception.fr/wp-content/uploads/2022/12/Chateau-summer-Chateau-les-Carrasse.jpg')" class="image-section"></div>
+        <div class="content_part">
+            <h4>
+                <span>Château Les Carrasses</span>
+                <div class="taxonomy_pictos">
+                                   <img class="filter_img charme-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Hebergements.png" alt="Partenaire">
+                                    </div>
+            </h4>
+
+            <div class="bottom_part">
+                <div class="localization_part">
+                                            <div>
+                            <span class="localization">Quarante</span>
+                        </div>
+                                                                <div>
+                            <span class="zone-geo">Béziers – Canal du Midi</span>
+                        </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</a>
+
+<a href="https://www.sitesdexception.fr/sites/chateau-de-lengarran/" class="list_item">
+    <div class="row">
+        <div style="background-image: url('https://www.sitesdexception.fr/wp-content/uploads/2019/02/Chateau-Lengarran-@Arnaud-Commune-6.jpg')" class="image-section"></div>
+        <div class="content_part">
+            <h4>
+                <span>Château de L'Engarran</span>
+                <div class="taxonomy_pictos">
+                                            <img class="filter_img monuments-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Monuments.png" alt="Monuments">
+                                            <img class="filter_img vin-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Vin.png" alt="Vins & savoir-faire">
+                                            <img class="filter_img parc-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Parcs-jardins.png" alt="Parcs & jardins">
+                                    </div>
+            </h4>
+
+            <div class="bottom_part">
+                <div class="localization_part">
+                                            <div>
+                            <span class="localization">Lavérune</span>
+                        </div>
+                                                                <div>
+                            <span class="zone-geo">Autour de Montpellier</span>
+                        </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</a>
+
+<a href="https://www.sitesdexception.fr/membres_associes/chateau-hermitage-de-combas/" class="list_item">
+    <div class="row">
+        <div style="background-image: url('https://www.sitesdexception.fr/wp-content/uploads/2023/01/Chateau-mai-2023-HD-6M.jpg')" class="image-section"></div>
+        <div class="content_part">
+            <h4>
+                <span>Château Hermitage de Combas</span>
+                <div class="taxonomy_pictos">
+                               <img class="filter_img charme-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Hebergements.png" alt="Partenaire">
+                                    </div>
+            </h4>
+
+            <div class="bottom_part">
+                <div class="localization_part">
+                                            <div>
+                            <span class="localization">Servian</span>
+                        </div>
+                                                                <div>
+                            <span class="zone-geo">Béziers – Canal du Midi</span>
+                        </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</a>
+
+<a href="https://www.sitesdexception.fr/membres_associes/chateau-du-parc-pezenas/" class="list_item">
+    <div class="row">
+        <div style="background-image: url('https://www.sitesdexception.fr/wp-content/uploads/2024/12/Chateau-du-parc-PezenasDSC_9372_DxO.png')" class="image-section"></div>
+        <div class="content_part">
+            <h4>
+                <span>Château du Parc Pézenas</span>
+                <div class="taxonomy_pictos">
+                                        <img class="filter_img charme-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Hebergements.png" alt="Partenaire">
+                                    </div>
+            </h4>
+
+            <div class="bottom_part">
+                <div class="localization_part">
+                                            <div>
+                            <span class="localization">Pézenas</span>
+                        </div>
+                                                                <div>
+                            <span class="zone-geo">Pézenas</span>
+                        </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</a>
+
+<a href="https://www.sitesdexception.fr/membres_associes/chateau-de-la-piscine/" class="list_item">
+    <div class="row">
+        <div style="background-image: url('https://www.sitesdexception.fr/wp-content/uploads/2025/06/DSC6904©BricePelleschi8©BricePelleschi32.jpg')" class="image-section"></div>
+        <div class="content_part">
+            <h4>
+                <span>Château de la Piscine</span>
+                <div class="taxonomy_pictos">
+                                        <img class="filter_img charme-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Hebergements.png" alt="Partenaire">
+                                    </div>
+            </h4>
+
+            <div class="bottom_part">
+                <div class="localization_part">
+                                            <div>
+                            <span class="localization">Montpellier</span>
+                        </div>
+                                                                <div>
+                            <span class="zone-geo">Montpellier</span>
+                        </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</a>
+
+
+<a href="https://www.sitesdexception.fr/membres_associes/chateau-la-roque-domaine-pic-saint-loup/" class="list_item">
+    <div class="row">
+        <div style="background-image: url('https://www.sitesdexception.fr/wp-content/uploads/2022/11/Chateau-Laroque-5.jpg')" class="image-section"></div>
+        <div class="content_part">
+            <h4>
+                <span>Château La Roque – Domaine Pic Saint-Loup</span>
+                <div class="taxonomy_pictos">
+                                <img class="filter_img detour-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Ca-vaut-le-detour.png" alt="Partenaire">
+                                    </div>
+            </h4>
+
+            <div class="bottom_part">
+                <div class="localization_part">
+                                            <div>
+                            <span class="localization">Fontanès</span>
+                        </div>
+                                                                <div>
+                            <span class="zone-geo">Autour de Montpellier</span>
+                        </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</a>
+
+
+<a href="https://www.sitesdexception.fr/membres_associes/chateau-saint-pierre-de-serjac/" class="list_item">
+    <div class="row">
+        <div style="background-image: url('https://www.sitesdexception.fr/wp-content/uploads/2022/12/Aerial-view-SERJAC.jpg')" class="image-section"></div>
+        <div class="content_part">
+            <h4>
+                <span>Château Saint Pierre de Serjac</span>
+                <div class="taxonomy_pictos">
+                         <img class="filter_img charme-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Hebergements.png" alt="Partenaire">
+                                    </div>
+            </h4>
+
+            <div class="bottom_part">
+                <div class="localization_part">
+                                            <div>
+                            <span class="localization">Puissalicon</span>
+                        </div>
+                                                                <div>
+                            <span class="zone-geo">Autour de Pézenas</span>
+                        </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</a>
+
+
+
+
+
+<a href="https://www.sitesdexception.fr/membres_associes/chateau-de-siran-hotel-4-etoiles/" class="list_item">
+    <div class="row">
+        <div style="background-image: url('https://www.sitesdexception.fr/wp-content/uploads/2025/03/chateau-de-Siran-Exterieur.jpeg')" class="image-section"></div>
+        <div class="content_part">
+            <h4>
+                <span>Château de Siran – Hôtel 4 étoiles</span>
+                <div class="taxonomy_pictos">
+                                         <img class="filter_img charme-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Hebergements.png" alt="Partenaire">
+                                    </div>
+            </h4>
+
+            <div class="bottom_part">
+                <div class="localization_part">
+                                            <div>
+                            <span class="localization">Siran</span>
+                        </div>
+                                                                <div>
+                            <span class="zone-geo">Corbières - Minervois</span>
+                        </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</a>
+
+<a href="https://www.sitesdexception.fr/membres_associes/chateau-zen-hotel-spa/" class="list_item">
+    <div class="row">
+        <div style="background-image: url('https://www.sitesdexception.fr/wp-content/uploads/2023/01/Photos-chambres-pour-site-2022b-15k-30.jpg')" class="image-section"></div>
+        <div class="content_part">
+            <h4>
+                <span>Château Zen – hôtel spa</span>
+                <div class="taxonomy_pictos">
+                                    <img class="filter_img charme-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Hebergements.png" alt="Partenaire">
+                                    </div>
+            </h4>
+
+            <div class="bottom_part">
+                <div class="localization_part">
+                                            <div>
+                            <span class="localization">Madières</span>
+                        </div>
+                                                                <div>
+                            <span class="zone-geo">Gard Cévennes</span>
+                        </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</a>
+
+<a href="https://www.sitesdexception.fr/membres_associes/domaine-la-bellonette/" class="list_item">
+    <div class="row">
+        <div style="background-image: url('https://www.sitesdexception.fr/wp-content/uploads/2023/11/DJI_20240621091135_0076_D.jpg')" class="image-section"></div>
+        <div class="content_part">
+            <h4>
+                <span>Domaine la Bellonette à Marseillan</span>
+                <div class="taxonomy_pictos">
+                                    <img class="filter_img charme-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Hebergements.png" alt="Partenaire">
+                                    </div>
+            </h4>
+
+            <div class="bottom_part">
+                <div class="localization_part">
+                                            <div>
+                            <span class="localization">Marseillan</span>
+                        </div>
+                                                                <div>
+                            <span class="zone-geo">Autour du Bassin de Thau</span>
+                        </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</a>
+
+<a href="https://www.sitesdexception.fr/membres_associes/domaine-de-biar/" class="list_item">
+    <div class="row">
+        <div style="background-image: url('https://www.sitesdexception.fr/wp-content/uploads/2022/11/R0A2942.jpg')" class="image-section"></div>
+        <div class="content_part">
+            <h4>
+                <span>Domaine de Biar</span>
+                <div class="taxonomy_pictos">
+                                    <img class="filter_img charme-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Hebergements.png" alt="Partenaire">
+                                    </div>
+            </h4>
+
+            <div class="bottom_part">
+                <div class="localization_part">
+                                            <div>
+                            <span class="localization">Lavérune</span>
+                        </div>
+                                                                <div>
+                            <span class="zone-geo">Autour de Montpellier</span>
+                        </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</a>
+
+<a href="https://www.sitesdexception.fr/membres_associes/domaine-de-la-dourbie/" class="list_item">
+    <div class="row">
+        <div style="background-image: url('https://www.sitesdexception.fr/wp-content/uploads/2019/06/Oscar.jpg')" class="image-section"></div>
+        <div class="content_part">
+            <h4>
+                <span>Domaine de la Dourbie</span>
+                <div class="taxonomy_pictos">
+                        <img class="filter_img detour-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Ca-vaut-le-detour.png" alt="Partenaire">
+                                    </div>
+            </h4>
+
+            <div class="bottom_part">
+                <div class="localization_part">
+                                            <div>
+                            <span class="localization">Canet</span>
+                        </div>
+                                                                <div>
+                            <span class="zone-geo">Autour de Pézenas</span>
+                        </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</a>
+
+<a href="https://www.sitesdexception.fr/membres_associes/domaine-du-grand-puy/" class="list_item">
+    <div class="row">
+        <div style="background-image: url('https://www.sitesdexception.fr/wp-content/uploads/2020/03/Entree-domaine-GP-3-accueil-slide-1-1.jpg')" class="image-section"></div>
+        <div class="content_part">
+            <h4>
+                <span>Domaine du Grand Puy</span>
+                <div class="taxonomy_pictos">
+                                        <img class="filter_img detour-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Ca-vaut-le-detour.png" alt="Partenaire">
+                                    </div>
+            </h4>
+
+            <div class="bottom_part">
+                <div class="localization_part">
+                                            <div>
+                            <span class="localization">Montpellier</span>
+                        </div>
+                                                                <div>
+                            <span class="zone-geo">Autour de Montpellier</span>
+                        </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</a>
+
+
+<a href="https://www.sitesdexception.fr/membres_associes/domaine-de-loulivie/" class="list_item">
+    <div class="row">
+        <div style="background-image: url('https://www.sitesdexception.fr/wp-content/uploads/2018/05/oulivie-LOR-JORDAN-SE.jpg')" class="image-section"></div>
+        <div class="content_part">
+            <h4>
+                <span>Domaine de L'Oulivie</span>
+                <div class="taxonomy_pictos">
+                                            <img class="filter_img detour-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Ca-vaut-le-detour.png" alt="Partenaire">
+                                    </div>
+            </h4>
+
+            <div class="bottom_part">
+                <div class="localization_part">
+                                            <div>
+                            <span class="localization">Combaillaux</span>
+                        </div>
+                                                                <div>
+                            <span class="zone-geo">Autour de Montpellier</span>
+                        </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</a>
+
+<a href="https://www.sitesdexception.fr/membres_associes/domaine-viticole-preignes-le-vieux/" class="list_item">
+    <div class="row">
+        <div style="background-image: url('https://www.sitesdexception.fr/wp-content/uploads/2023/01/domaine-preignes-9.jpg')" class="image-section"></div>
+        <div class="content_part">
+            <h4>
+                <span>Domaine de Preignes le Vieux</span>
+                <div class="taxonomy_pictos">
+                                            <img class="filter_img detour-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Ca-vaut-le-detour.png" alt="Partenaire">
+                                    </div>
+            </h4>
+
+            <div class="bottom_part">
+                <div class="localization_part">
+                                            <div>
+                            <span class="localization">Vias</span>
+                        </div>
+                                                                <div>
+                            <span class="zone-geo">Béziers – Canal du Midi</span>
+                        </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</a>
+
+
+<a href="https://www.sitesdexception.fr/membres_associes/domaine-de-la-solenciere/" class="list_item">
+    <div class="row">
+        <div style="background-image: url('https://www.sitesdexception.fr/wp-content/uploads/2025/01/Solenciere-31.jpg')" class="image-section"></div>
+        <div class="content_part">
+            <h4>
+                <span>Domaine de la Solencière</span>
+                <div class="taxonomy_pictos">
+                                           <img class="filter_img charme-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Hebergements.png" alt="Partenaire">
+                                    </div>
+            </h4>
+
+            <div class="bottom_part">
+                <div class="localization_part">
+                                            <div>
+                            <span class="localization">Saint thibéry</span>
+                        </div>
+                                                                <div>
+                            <span class="zone-geo">Autour de Pézenas</span>
+                        </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</a>
+
+
+  
+
+<a href="https://www.sitesdexception.fr/sites/site-archeologique-et-musee-denserune/" class="list_item">
+    <div class="row">
+        <div style="background-image: url('https://www.sitesdexception.fr/wp-content/uploads/2018/04/Ensérune-Quartier_artisanal@Rémi-Marion-CMN.jpg')" class="image-section"></div>
+        <div class="content_part">
+            <h4>
+                <span>Ensérune, site archéologique et musée</span>
+                <div class="taxonomy_pictos">
+                                            <img class="filter_img gallo-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/12/romains.png" alt="Sites et musées Gallo-romains">
+                                    </div>
+            </h4>
+
+            <div class="bottom_part">
+                <div class="localization_part">
+                                            <div>
+                            <span class="localization">Nissan-lez-Ensérune</span>
+                        </div>
+                                                                <div>
+                            <span class="zone-geo">Béziers – Canal du Midi</span>
+                        </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</a>
+
+<a href="https://www.sitesdexception.fr/sites/espace-georges-brassens/" class="list_item">
+    <div class="row">
+        <div style="background-image: url('https://www.sitesdexception.fr/wp-content/uploads/2019/02/IMG_9646.jpg')" class="image-section"></div>
+        <div class="content_part">
+            <h4>
+                <span>Espace Georges Brassens</span>
+                <div class="taxonomy_pictos">
+                                            <img class="filter_img musees-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Musees.png" alt="Musées d'art et de société">
+                                    </div>
+            </h4>
+
+            <div class="bottom_part">
+                <div class="localization_part">
+                                            <div>
+                            <span class="localization">Sète</span>
+                        </div>
+                                                                <div>
+                            <span class="zone-geo">Autour du Bassin de Thau</span>
+                        </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</a>
+
+<a href="https://www.sitesdexception.fr/sites/grotte-de-laven-armand/" class="list_item">
+    <div class="row">
+        <div style="background-image: url('https://www.sitesdexception.fr/wp-content/uploads/2020/03/066-Aven-Armand-2014-www.pixelsmillau.fr-copie.jpg')" class="image-section"></div>
+        <div class="content_part">
+            <h4>
+                <span>Grotte de l'Aven Armand</span>
+                <div class="taxonomy_pictos">
+                                    <img class="filter_img grotte-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Sites-geologiques.png" alt="Sites géologiques">
+                                    </div>
+            </h4>
+
+            <div class="bottom_part">
+                <div class="localization_part">
+                                            <div>
+                            <span class="localization">Hures-la-Parade</span>
+                        </div>
+                                                                <div>
+                            <span class="zone-geo">Sud Lozère</span>
+                        </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</a>
+
+<a href="https://www.sitesdexception.fr/sites/la-grotte-de-dargilan/" class="list_item">
+    <div class="row">
+        <div style="background-image: url('https://www.sitesdexception.fr/wp-content/uploads/2020/02/IMG_1914-HDR-1000x667.jpg')" class="image-section"></div>
+        <div class="content_part">
+            <h4>
+                <span>Grotte de Dargilan</span>
+                <div class="taxonomy_pictos">
+                                            <img class="filter_img grotte-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Sites-geologiques.png" alt="Sites géologiques">
+                                    </div>
+            </h4>
+
+            <div class="bottom_part">
+                <div class="localization_part">
+                                            <div>
+                            <span class="localization">Meyrueis</span>
+                        </div>
+                                                                <div>
+                            <span class="zone-geo">Sud Lozère</span>
+                        </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</a>
+
+<a href="https://www.sitesdexception.fr/sites/grotte-des-demoiselles/" class="list_item">
+    <div class="row">
+        <div style="background-image: url('https://www.sitesdexception.fr/wp-content/uploads/2018/04/Grotte_des_Demoiselles_Emidio_Castri3.jpg')" class="image-section"></div>
+        <div class="content_part">
+            <h4>
+                <span>Grotte des Demoiselles</span>
+                <div class="taxonomy_pictos">
+                                            <img class="filter_img grotte-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Sites-geologiques.png" alt="Sites géologiques">
+                                    </div>
+            </h4>
+
+            <div class="bottom_part">
+                <div class="localization_part">
+                                            <div>
+                            <span class="localization">Saint-Bauzille-de-Putois</span>
+                        </div>
+                                                                <div>
+                            <span class="zone-geo">Entre Pic-Saint-Loup et Cévennes</span>
+                        </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</a>
+
+<a href="https://www.sitesdexception.fr/sites/grotte-de-trabuc/" class="list_item">
+    <div class="row">
+        <div style="background-image: url('https://www.sitesdexception.fr/wp-content/uploads/2020/02/IMG_7781-HDR.jpg')" class="image-section"></div>
+        <div class="content_part">
+            <h4>
+                <span>Grotte de Trabuc</span>
+                <div class="taxonomy_pictos">
+                                        <img class="filter_img grotte-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Sites-geologiques.png" alt="Sites géologiques">
+                                    </div>
+            </h4>
+
+            <div class="bottom_part">
+                <div class="localization_part">
+                                            <div>
+                            <span class="localization">Mialet </span>
+                        </div>
+                                                                <div>
+                            <span class="zone-geo">Gard Cévennes</span>
+                        </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</a>
+
+
+
+<a href="https://www.sitesdexception.fr/sites/grotte-de-la-salamandre/" class="list_item">
+    <div class="row">
+        <div style="background-image: url('https://www.sitesdexception.fr/wp-content/uploads/2020/01/IMG_6946.jpg')" class="image-section"></div>
+        <div class="content_part">
+            <h4>
+                <span>Grotte de la Salamandre</span>
+                <div class="taxonomy_pictos">
+                                    <img class="filter_img grotte-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Sites-geologiques.png" alt="Sites géologiques">
+                                    </div>
+            </h4>
+
+            <div class="bottom_part">
+                <div class="localization_part">
+                                            <div>
+                            <span class="localization">Méjannes-le-Clap</span>
+                        </div>
+                                                                <div>
+                            <span class="zone-geo">Gard Cévennes</span>
+                        </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</a>
+
+<a href="https://www.sitesdexception.fr/sites/halle-du-verre-musee-du-verre/" class="list_item">
+    <div class="row">
+        <div style="background-image: url('https://www.sitesdexception.fr/wp-content/uploads/2018/04/74-copie.jpg')" class="image-section"></div>
+        <div class="content_part">
+            <h4>
+                <span>Halle du Verre – Musée du Verre</span>
+                <div class="taxonomy_pictos">
+                                            <img class="filter_img musees-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Musees.png" alt="Musées d'art et de société">
+                                    </div>
+            </h4>
+
+            <div class="bottom_part">
+                <div class="localization_part">
+                                            <div>
+                            <span class="localization">Claret</span>
+                        </div>
+                                                                <div>
+                            <span class="zone-geo">Entre Pic-Saint-Loup et Cévennes</span>
+                        </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</a>
+
+<a href="https://www.sitesdexception.fr/membres_associes/hotel-saint-alban-nezignan-leveque/" class="list_item">
+    <div class="row">
+        <div style="background-image: url('https://www.sitesdexception.fr/wp-content/uploads/2022/11/chambre_02_01.jpg')" class="image-section"></div>
+        <div class="content_part">
+            <h4>
+                <span>Hôtel Saint-Alban</span>
+                <div class="taxonomy_pictos">
+                    <img class="filter_img charme-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Hebergements.png" alt="Partenaire">
+                                    </div>
+            </h4>
+
+            <div class="bottom_part">
+                <div class="localization_part">
+                                            <div>
+                            <span class="localization">Nézignan L'Evêque</span>
+                        </div>
+                                                                <div>
+                            <span class="zone-geo">Autour de Pézenas</span>
+                        </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</a>
+
+<a href="https://www.sitesdexception.fr/membres_associes/bateau-du-soleil/" class="list_item">
+    <div class="row">
+        <div style="background-image: url('https://www.sitesdexception.fr/wp-content/uploads/2018/05/Capitan-Pont-des-Trois-Yeux-.jpg')" class="image-section"></div>
+        <div class="content_part">
+            <h4>
+                <span>Les Bateaux du Soleil</span>
+                <div class="taxonomy_pictos">
+                                        <img class="filter_img detour-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Ca-vaut-le-detour.png" alt="Partenaire">
+                                    </div>
+            </h4>
+
+            <div class="bottom_part">
+                <div class="localization_part">
+                                            <div>
+                            <span class="localization">Agde</span>
+                        </div>
+                                                                <div>
+                            <span class="zone-geo">Béziers – Canal du Midi</span>
+                        </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</a>
+
+<a href="https://www.sitesdexception.fr/membres_associes/la-bouquerie-lagrasse/" class="list_item">
+    <div class="row">
+        <div style="background-image: url('https://www.sitesdexception.fr/wp-content/uploads/2023/11/Bouquerie-1-1.jpg-1.jpg')" class="image-section"></div>
+        <div class="content_part">
+            <h4>
+                <span>La Bouquerie Lagrasse</span>
+                <div class="taxonomy_pictos">
+                 <img class="filter_img charme-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Hebergements.png" alt="Partenaire">
+                                    </div>
+            </h4>
+
+            <div class="bottom_part">
+                <div class="localization_part">
+                                            <div>
+                            <span class="localization">Lagrasse</span>
+                        </div>
+                                                                <div>
+                            <span class="zone-geo">Corbières - Minervois</span>
+                        </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</a>
+
+<a href="https://www.sitesdexception.fr/sites/le-chateau-laurens/" class="list_item">
+    <div class="row">
+        <div style="background-image: url('https://www.sitesdexception.fr/wp-content/uploads/2023/02/Atrium_Maugendre-David_IGP-_Region-Occitanie-copie.jpg')" class="image-section"></div>
+        <div class="content_part">
+            <h4>
+                <span>Le Château Laurens</span>
+                <div class="taxonomy_pictos">
+                                            <img class="filter_img monuments-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Monuments.png" alt="Monuments">
+                                    </div>
+            </h4>
+
+            <div class="bottom_part">
+                <div class="localization_part">
+                                            <div>
+                            <span class="localization">Agde</span>
+                        </div>
+                                                                <div>
+                            <span class="zone-geo">Autour de Pézenas</span>
+                        </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</a>
+
+<a href="https://www.sitesdexception.fr/sites/cite-de-pierres/" class="list_item">
+    <div class="row">
+        <div style="background-image: url('https://www.sitesdexception.fr/wp-content/uploads/2020/03/IMG_2353-HDR.jpg')" class="image-section"></div>
+        <div class="content_part">
+            <h4>
+                <span>La Cité de Pierres</span>
+                <div class="taxonomy_pictos">
+                                        <img class="filter_img grotte-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Sites-geologiques.png" alt="Sites géologiques">
+                                    </div>
+            </h4>
+
+            <div class="bottom_part">
+                <div class="localization_part">
+                                            <div>
+                            <span class="localization">Montpellier-le-Vieux</span>
+                        </div>
+                                                                <div>
+                            <span class="zone-geo">Entre Plaine et Causse</span>
+                        </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</a>
+
+
+<a href="https://www.sitesdexception.fr/membres_associes/letoile-de-thau-iv-bateau-promenade-marseillan/" class="list_item">
+    <div class="row">
+        <div style="background-image: url('https://www.sitesdexception.fr/wp-content/uploads/2022/02/DIANNE-E-515.jpg')" class="image-section"></div>
+        <div class="content_part">
+            <h4>
+                <span>L'Étoile de Thau IV – Bateau promenade Marseillan</span>
+                <div class="taxonomy_pictos">
+                                    <img class="filter_img detour-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Ca-vaut-le-detour.png" alt="Partenaire">
+                                    </div>
+            </h4>
+
+            <div class="bottom_part">
+                <div class="localization_part">
+                                            <div>
+                            <span class="localization">Marseillan</span>
+                        </div>
+                                                                <div>
+                            <span class="zone-geo">Autour du Bassin de Thau</span>
+                        </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</a>
+
+<a href="https://www.sitesdexception.fr/membres_associes/la-maison-du-passage/" class="list_item">
+    <div class="row">
+        <div style="background-image: url('https://www.sitesdexception.fr/wp-content/uploads/2024/04/Chambre-2.jpg')" class="image-section"></div>
+        <div class="content_part">
+            <h4>
+                <span>La Maison du Passage</span>
+                <div class="taxonomy_pictos">
+                                    <img class="filter_img charme-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Hebergements.png" alt="Partenaire">
+                                    </div>
+            </h4>
+
+            <div class="bottom_part">
+                <div class="localization_part">
+                                            <div>
+                            <span class="localization">Martignargues</span>
+                        </div>
+                                                                <div>
+                            <span class="zone-geo">Gard Cévennes</span>
+                        </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</a>
+
+<a href="https://www.sitesdexception.fr/membres_associes/la-manufacture-nationale-de-la-savonnerie-de-lodeve/" class="list_item">
+    <div class="row">
+        <div style="background-image: url('https://www.sitesdexception.fr/wp-content/uploads/2023/02/IMG_20230202_142058-1.jpg')" class="image-section"></div>
+        <div class="content_part">
+            <h4>
+                <span>La Manufacture Nationale de la Savonnerie à Lodève</span>
+                <div class="taxonomy_pictos">
+                                            <img class="filter_img detour-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Ca-vaut-le-detour.png" alt="Partenaire">
+                                    </div>
+            </h4>
+
+            <div class="bottom_part">
+                <div class="localization_part">
+                                            <div>
+                            <span class="localization">Lodève</span>
+                        </div>
+                                                                <div>
+                            <span class="zone-geo">Lodévois et Larzac</span>
+                        </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</a>
+
+
+<a href="https://www.sitesdexception.fr/membres_associes/le-phare-saint-louis-de-sete/" class="list_item">
+    <div class="row">
+        <div style="background-image: url('https://www.sitesdexception.fr/wp-content/uploads/2023/12/Visite_du_phare_Saint_Louis-R_Domergue_OT-THAU-20820.jpg')" class="image-section"></div>
+        <div class="content_part">
+            <h4>
+                <span>Le phare Saint Louis de Sète</span>
+                <div class="taxonomy_pictos">
+                                        <img class="filter_img detour-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Ca-vaut-le-detour.png" alt="Partenaire">
+                                    </div>
+            </h4>
+
+            <div class="bottom_part">
+                <div class="localization_part">
+                                            <div>
+                            <span class="localization">Sète</span>
+                        </div>
+                                                                <div>
+                            <span class="zone-geo">Sète</span>
+                        </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</a>
+
+<a href="https://www.sitesdexception.fr/sites/prieure-de-grandmont-et-le-dolmen-de-costes-rouge/" class="list_item">
+    <div class="row">
+        <div style="background-image: url('https://www.sitesdexception.fr/wp-content/uploads/2018/04/20584_00001-prieure-Saint-Michel-de-Grandmont-Soumont-photo-aspheries_792x527-1.jpg')" class="image-section"></div>
+        <div class="content_part">
+            <h4>
+                <span>Le Prieuré Saint Michel de Grandmont</span>
+                <div class="taxonomy_pictos">
+                                            <img class="filter_img monuments-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Monuments.png" alt="Monuments">
+                                            <img class="filter_img parc-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Parcs-jardins.png" alt="Parcs & jardins">
+                                    </div>
+            </h4>
+
+            <div class="bottom_part">
+                <div class="localization_part">
+                                            <div>
+                            <span class="localization">Soumont</span>
+                        </div>
+                                                                <div>
+                            <span class="zone-geo">Lodévois et Larzac</span>
+                        </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</a>
+
+
+
+<a href="https://www.sitesdexception.fr/sites/les-sites-templiers-et-hospitaliers-du-larzac/" class="list_item">
+    <div class="row">
+        <div style="background-image: url('https://www.sitesdexception.fr/wp-content/uploads/2022/02/Ste-Eulalie-de-Cernon-1.jpg')" class="image-section"></div>
+        <div class="content_part">
+            <h4>
+                <span>Les sites Templiers et Hospitaliers du Larzac</span>
+                <div class="taxonomy_pictos">
+                                            <img class="filter_img monuments-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Monuments.png" alt="Monuments">
+                                    </div>
+            </h4>
+
+            <div class="bottom_part">
+                <div class="localization_part">
+                                            <div>
+                            <span class="localization">Larzac</span>
+                        </div>
+                                                                <div>
+                            <span class="zone-geo">Larzac</span>
+                        </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</a>
+
+<a href="https://www.sitesdexception.fr/sites/maison-des-consuls-musee-darts-et-darcheologie/" class="list_item">
+    <div class="row">
+        <div style="background-image: url('https://www.sitesdexception.fr/wp-content/uploads/2018/04/Maison_des_consuls.jpg')" class="image-section"></div>
+        <div class="content_part">
+            <h4>
+                <span>Maison des Consuls – Musée d'Arts et d'Archéologie</span>
+                <div class="taxonomy_pictos">
+                                        <img class="filter_img musees-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Musees.png" alt="Musées d'art et de société">
+                                    </div>
+            </h4>
+
+            <div class="bottom_part">
+                <div class="localization_part">
+                                            <div>
+                            <span class="localization">Les Matelles</span>
+                        </div>
+                                                                <div>
+                            <span class="zone-geo">Entre Pic-Saint-Loup et Cévennes</span>
+                        </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</a>
+
+<a href="https://www.sitesdexception.fr/membres_associes/maison-jullian-maison-dhotes-de-charme-restaurant/" class="list_item">
+    <div class="row">
+        <div style="background-image: url('https://www.sitesdexception.fr/wp-content/uploads/2025/04/1_Maison-Jullian-Facade.jpg')" class="image-section"></div>
+        <div class="content_part">
+            <h4>
+                <span>Maison Jullian</span>
+                <div class="taxonomy_pictos">
+                                    <img class="filter_img charme-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Hebergements.png" alt="Partenaire">
+                                    </div>
+            </h4>
+
+            <div class="bottom_part">
+                <div class="localization_part">
+                                            <div>
+                            <span class="localization">Béziers</span>
+                        </div>
+                                                                <div>
+                            <span class="zone-geo">Béziers – Canal du Midi</span>
+                        </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</a><a href="https://www.sitesdexception.fr/membres_associes/maison-des-metiers-dart-de-pezenas/" class="list_item">
+    <div class="row">
+        <div style="background-image: url('https://www.sitesdexception.fr/wp-content/uploads/2023/02/Photos-Maison-des-Metiers-darts-Pezenas-2-©AlexGallosi-4231.jpg')" class="image-section"></div>
+        <div class="content_part">
+            <h4>
+                <span>Maison des Métiers d'Art de Pézenas</span>
+                <div class="taxonomy_pictos">
+                                        <img class="filter_img detour-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Ca-vaut-le-detour.png" alt="Partenaire">
+                                    </div>
+            </h4>
+
+            <div class="bottom_part">
+                <div class="localization_part">
+                                            <div>
+                            <span class="localization">Pézenas</span>
+                        </div>
+                                                                <div>
+                            <span class="zone-geo">Pézenas</span>
+                        </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</a>
+
+<a href="https://www.sitesdexception.fr/sites/maison-noilly-prat/" class="list_item">
+    <div class="row">
+        <div style="background-image: url('https://www.sitesdexception.fr/wp-content/uploads/2018/04/Olivier-Octobre-2.jpg')" class="image-section"></div>
+        <div class="content_part">
+            <h4>
+                <span>Maison Noilly Prat</span>
+                <div class="taxonomy_pictos">
+                                            <img class="filter_img vin-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Vin.png" alt="Vins & savoir-faire">
+                                    </div>
+            </h4>
+
+            <div class="bottom_part">
+                <div class="localization_part">
+                                            <div>
+                            <span class="localization">Marseillan</span>
+                        </div>
+                                                                <div>
+                            <span class="zone-geo">Autour du Bassin de Thau</span>
+                        </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</a>
+
+<a href="https://www.sitesdexception.fr/sites/maison-rouge-musee-des-vallees-cevenoles/" class="list_item">
+    <div class="row">
+        <div style="background-image: url('https://www.sitesdexception.fr/wp-content/uploads/2020/01/Maison-Rougedouble-archictecture-ext.jpg')" class="image-section"></div>
+        <div class="content_part">
+            <h4>
+                <span>Maison Rouge – Musée des vallées cévenoles</span>
+                <div class="taxonomy_pictos">
+                                            <img class="filter_img musees-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Musees.png" alt="Musées d'art et de société">
+                                    </div>
+            </h4>
+
+            <div class="bottom_part">
+                <div class="localization_part">
+                                            <div>
+                            <span class="localization">Saint-Jean-du-Gard</span>
+                        </div>
+                                                                <div>
+                            <span class="zone-geo">Gard Cévennes</span>
+                        </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</a>
+
+<a href="https://www.sitesdexception.fr/membres_associes/mas-de-daumas-gassac/" class="list_item">
+    <div class="row">
+        <div style="background-image: url('https://www.sitesdexception.fr/wp-content/uploads/2019/01/DAUMASGASSAC_GuilhemCANAL24-1.jpg')" class="image-section"></div>
+        <div class="content_part">
+            <h4>
+                <span>Mas de Daumas Gassac</span>
+                <div class="taxonomy_pictos">
+                                    <img class="filter_img detour-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Ca-vaut-le-detour.png" alt="Partenaire">
+                                    </div>
+            </h4>
+
+            <div class="bottom_part">
+                <div class="localization_part">
+                                            <div>
+                            <span class="localization">Aniane</span>
+                        </div>
+                                                                <div>
+                            <span class="zone-geo">Dans les Gorges de l’Hérault</span>
+                        </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</a>
+
+<a href="https://www.sitesdexception.fr/membres_associes/minerve/" class="list_item">
+    <div class="row">
+        <div style="background-image: url('https://www.sitesdexception.fr/wp-content/uploads/2023/01/Minerve_31-07_2_sur_7.jpg')" class="image-section"></div>
+        <div class="content_part">
+            <h4>
+                <span>Minerve : Cité Cathare et Plus beau village de France</span>
+                <div class="taxonomy_pictos">
+                                        <img class="filter_img detour-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Ca-vaut-le-detour.png" alt="Partenaire">
+                                    </div>
+            </h4>
+
+            <div class="bottom_part">
+                <div class="localization_part">
+                                            <div>
+                            <span class="localization">Minerve</span>
+                        </div>
+                                                                <div>
+                            <span class="zone-geo">Minervois - Caroux</span>
+                        </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</a>
+
+<a href="https://www.sitesdexception.fr/sites/musee-de-lodeve/" class="list_item">
+    <div class="row" data-cluster-pos-x="364" data-cluster-pos-y="313" data-pos-x="352" data-pos-y="314">
+        <div style="background-image: url('https://www.sitesdexception.fr/wp-content/uploads/2018/04/Accueilfamille©Vincent_Fillon.jpg')" class="image-section"></div>
+        <div class="content_part">
+            <h4>
+                <span>Musée de Lodève</span>
+                <div class="taxonomy_pictos">
+                <img class="filter_img musees-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Musees.png" alt="Musées d'art et de société">
+                </div>
+            </h4>
+
+            <div class="bottom_part">
+                <div class="localization_part">
+                                            <div>
+                            <span class="localization">Lodève</span>
+                        </div>
+                                                                <div>
+                            <span class="zone-geo">Lodévois et Larzac</span>
+                        </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</a>
+
+<a href="https://www.sitesdexception.fr/sites/musee-narbo-via/" class="list_item">
+    <div class="row">
+        <div style="background-image: url('https://www.sitesdexception.fr/wp-content/uploads/2023/12/galerie-lapidaire-musee-narbo-via.png')" class="image-section"></div>
+        <div class="content_part">
+            <h4>
+                <span>Musée Narbo Via</span>
+                <div class="taxonomy_pictos">
+                    <img class="filter_img monuments-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Monuments.png" alt="Monuments">
+                    <img class="filter_img gallo-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/12/romains.png" alt="Sites et musées Gallo-romains">
+                                    </div>
+            </h4>
+
+            <div class="bottom_part">
+                <div class="localization_part">
+                                            <div>
+                            <span class="localization">Narbonne</span>
+                        </div>
+                                                                <div>
+                            <span class="zone-geo">Aude</span>
+                        </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</a>
+
+
+  <a href="https://www.sitesdexception.fr/sites/musee-regional-dart-contemporain-occitanie-pyrenees-mediterranee/" class="list_item">
+    <div class="row" data-pos-x="338" data-pos-y="540">
+        <div style="background-image: url('https://www.sitesdexception.fr/wp-content/uploads/2018/04/IMG_0826.jpg')" class="image-section"></div>
+        <div class="content_part">
+            <h4>
+                <span>Musée régional d'art contemporain Sérignan (MRAC)</span>
+                <div class="taxonomy_pictos">
+                <img class="filter_img musees-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Musees.png" alt="Musées d'art et de société">
+                </div>
+            </h4>
+
+            <div class="bottom_part">
+                <div class="localization_part">
+                                            <div>
+                            <span class="localization">Sérignan</span>
+                        </div>
+                                                                <div>
+                            <span class="zone-geo">Béziers – Canal du Midi</span>
+                        </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</a>
+
+<a href="https://www.sitesdexception.fr/sites/musee-de-la-romanite/" class="list_item">
+    <div class="row">
+        <div style="background-image: url('https://www.sitesdexception.fr/wp-content/uploads/2021/02/©Stephane-Ramillon-Ville-de-Nimes-7-e1615471565664.jpg')" class="image-section"></div>
+        <div class="content_part">
+            <h4>
+                <span>Musée de la Romanité</span>
+                <div class="taxonomy_pictos">
+                                        <img class="filter_img gallo-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/12/romains.png" alt="Sites et musées Gallo-romains">
+                                    </div>
+            </h4>
+
+            <div class="bottom_part">
+                <div class="localization_part">
+                                            <div>
+                            <span class="localization">Nîmes</span>
+                        </div>
+                                                                <div>
+                            <span class="zone-geo">Nîmes</span>
+                        </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</a>
+
+<a href="https://www.sitesdexception.fr/membres_associes/nougaterie-des-fumades/" class="list_item">
+    <div class="row">
+        <div style="background-image: url('https://www.sitesdexception.fr/wp-content/uploads/2020/03/67841875_1237422659764153_1172707804759195648_o.jpg')" class="image-section"></div>
+        <div class="content_part">
+            <h4>
+                <span>Nougaterie des Fumades</span>
+                <div class="taxonomy_pictos">
+                                            <img class="filter_img detour-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Ca-vaut-le-detour.png" alt="Partenaire">
+                                    </div>
+            </h4>
+
+            <div class="bottom_part">
+                <div class="localization_part">
+                                            <div>
+                            <span class="localization">Allègre les Fumades</span>
+                        </div>
+                                                                <div>
+                            <span class="zone-geo">Gard Cévennes</span>
+                        </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</a>
+
+<a href="https://www.sitesdexception.fr/sites/pezenas-ville-dart-et-dhistoire/" class="list_item">
+    <div class="row">
+        <div style="background-image: url('https://www.sitesdexception.fr/wp-content/uploads/2018/09/Hotel-Lacoste-Pezenas_Office-de-tourisme-Cap-dagde-Méditerranée.jpg')" class="image-section"></div>
+        <div class="content_part">
+            <h4>
+                <span>Pézenas, ville d'art et d'histoire</span>
+                <div class="taxonomy_pictos">
+                                            <img class="filter_img monuments-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Monuments.png" alt="Monuments">
+                                    </div>
+            </h4>
+
+            <div class="bottom_part">
+                <div class="localization_part">
+                                            <div>
+                            <span class="localization">Pézenas</span>
+                        </div>
+                                                                <div>
+                            <span class="zone-geo">Pézenas</span>
+                        </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</a>
+
+<a href="https://www.sitesdexception.fr/membres_associes/vase-danduze-les-enfants-de-boisset/" class="list_item">
+    <div class="row">
+        <div style="background-image: url('https://www.sitesdexception.fr/wp-content/uploads/2020/03/IMG_4871-HDR.jpg')" class="image-section"></div>
+        <div class="content_part">
+            <h4>
+                <span>Poteries d'Anduze – Les Enfants de Boisset</span>
+                <div class="taxonomy_pictos">
+                                        <img class="filter_img detour-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Ca-vaut-le-detour.png" alt="Partenaire">
+                                    </div>
+            </h4>
+
+            <div class="bottom_part">
+                <div class="localization_part">
+                                            <div>
+                            <span class="localization">Anduze</span>
+                        </div>
+                                                                <div>
+                            <span class="zone-geo">Gard Cévennes</span>
+                        </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</a>
+
+
+<a href="https://www.sitesdexception.fr/sites/presquile-de-maguelone/" class="list_item">
+    <div class="row">
+        <div style="background-image: url('https://www.sitesdexception.fr/wp-content/uploads/2025/01/Domaine-de-Maguelone-et-Cathedrale-@Arnaud-Commune-11.png')" class="image-section"></div>
+        <div class="content_part">
+            <h4>
+                <span>Presqu'île de Maguelone</span>
+                <div class="taxonomy_pictos">
+                                            <img class="filter_img monuments-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Monuments.png" alt="Monuments">
+                                            <img class="filter_img vin-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Vin.png" alt="Vins & savoir-faire">
+                                            <img class="filter_img parc-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Parcs-jardins.png" alt="Parcs & jardins">
+                                    </div>
+            </h4>
+
+            <div class="bottom_part">
+                <div class="localization_part">
+                                            <div>
+                            <span class="localization">Palavas Les Flots</span>
+                        </div>
+                                                                <div>
+                            <span class="zone-geo">Autour de Montpellier</span>
+                        </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</a>
+
+
+<a href="https://www.sitesdexception.fr/membres_associes/train-a-vapeur-des-cevennes/" class="list_item">
+    <div class="row">
+        <div style="background-image: url('https://www.sitesdexception.fr/wp-content/uploads/2023/12/Train-Vapeur-Cevennes-.jpg')" class="image-section"></div>
+        <div class="content_part">
+            <h4>
+                <span>Train à vapeur des Cévennes</span>
+                <div class="taxonomy_pictos">
+                                        <img class="filter_img detour-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Ca-vaut-le-detour.png" alt="Partenaire">
+                                    </div>
+            </h4>
+
+            <div class="bottom_part">
+                <div class="localization_part">
+                                            <div>
+                            <span class="localization">Anduze</span>
+                        </div>
+                                                                <div>
+                            <span class="zone-geo">Gard Cévennes</span>
+                        </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</a>
+
+
+
+<a href="https://www.sitesdexception.fr/sites/viaduc-de-millau/" class="list_item">
+    <div class="row">
+        <div style="background-image: url('https://www.sitesdexception.fr/wp-content/uploads/2019/02/IMG_8526-1.jpg')" class="image-section"></div>
+        <div class="content_part">
+            <h4>
+                <span>Viaduc de Millau</span>
+                <div class="taxonomy_pictos">
+                                    <img class="filter_img monuments-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Monuments.png" alt="Monuments">
+                                    </div>
+            </h4>
+
+            <div class="bottom_part">
+                <div class="localization_part">
+                                            <div>
+                            <span class="localization">Millau</span>
+                        </div>
+                                                                <div>
+                            <span class="zone-geo">Sud Aveyron</span>
+                        </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</a>
+
+
+
+
+
+<a href="https://www.sitesdexception.fr/membres_associes/villa-kumquats-chambres-et-table-dhotes-urbaines/" class="list_item">
+    <div class="row">
+        <div style="background-image: url('https://www.sitesdexception.fr/wp-content/uploads/2023/01/Villa-Kumquats-2.jpg')" class="image-section"></div>
+        <div class="content_part">
+            <h4>
+                <span>Villa Kumquats, chambres et table d'hôtes urbaines</span>
+                <div class="taxonomy_pictos">
+                                            <img class="filter_img charme-marker" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Hebergements.png" alt="Partenaire">
+                                    </div>
+            </h4>
+
+            <div class="bottom_part">
+                <div class="localization_part">
+                                            <div>
+                            <span class="localization">Béziers</span>
+                        </div>
+                                                                <div>
+                            <span class="zone-geo">Béziers – Canal du Midi</span>
+                        </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
+</a>
+
+
+</div>
+  </div>
+
+</div>
+
+
+
+
+<script>
+
+console.log(window.location.href);
+
+
+
+let listOfSites = document.querySelector('#list_container');
+
+  var map = L.map('map').setView([43.6606, 3.4538], 9);
+
+  window.addEventListener("resize", (event) => {
+    if (window.innerWidth < 900) {
+        map.setZoom(8);
+    } else if (window.innerWidth > 900) {
+        map.setZoom(9);
+    }
+  });
+
+  map.locate({maxZoom: 14});
+
+  function onLocationFound(e) {
+
+    L.circle(e.latlng, 600).addTo(map);
+}
+
+map.on('locationfound', onLocationFound);
+
+  const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+		maxZoom: 19,
+		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+}).addTo(map);
+
+var mapIcon = L.Icon.extend({
+    options: {
+    iconSize: [38, 38],
+    iconAnchor: [20, 50],
+    popupAnchor: [0, -42],
+    }
+});
+
+var markerPop = L.Popup.extend({
+    options: {
+      maxHeight: 250,
+      minWidth: 300,
+    }
+});
+
+
+
+function createPopupContent(headerID, title, websiteLink, phone, ticketLink, selLink, siteImage) {
+
+  let content = null;
+
+  if (ticketLink === "no") {
+    content = `
+    <div><h4 class="popup-header" id=${headerID}>${title}</h4></div>
+    <div class="flex-section-div">
+      <div class="flex-section-image-div"><a href="${selLink}"><img src='${siteImage}'></a></div>  
+      <div class="flex-section-text-div">
+        <div class="flex-section-text-div-list-section">
+          <ul>
+          <li>
+          <b>Site internet : </b></br>
+          <a target="_blank" href="https://${websiteLink}">${websiteLink}</a>
+          </li>
+          <li>
+          <b>Téléphone : </b></br>
+          <a href="tel:${phone}">${phone}</a>
+          </li>
+          </ul>
+        </div>
+        <div class="flex-section-text-div-button-section">
+        <a href="${selLink}"><button class="know-more-button">EN SAVOIR+</button></a>
+        </div>
+      </div>  
+    </div>
+    `
+  } else {
+      content = `
+    <div><h4 class="popup-header" id=${headerID}>${title}</h4></div>
+    <div class="flex-section-div">
+      <div class="flex-section-image-div"><a href="${selLink}"><img src='${siteImage}'></a></div>  
+      <div class="flex-section-text-div">
+        <div class="flex-section-text-div-list-section">
+          <ul>
+          <li>
+          <b>Site internet : </b></br>
+          <a target="_blank" href="https://${websiteLink}">${websiteLink}</a>
+          </li>
+          <li>
+          <b>Téléphone : </b></br>
+          <a href="tel:${phone}">${phone}</a>
+          </li>
+          <li>
+          <b>Billetterie en ligne : </b></br>
+          <a href=${ticketLink} target="_blank" class="side-red-button-reservation">Accèder</a>
+          </li>
+          </ul>
+        </div>
+        <div class="flex-section-text-div-button-section">
+        <a href="${selLink}"><button class="know-more-button">EN SAVOIR+</button></a>
+        </div>
+      </div>  
+    </div>
+    `;
+  }
+
+   return content;               
+}
+
+
+const museesIcon = new mapIcon({iconUrl: 'https://www.sitesdexception.fr/wp-content/uploads/2025/11/Musees-Goutte.png', className: "musees-marker"});
+const galloIcon = new mapIcon({iconUrl: 'https://www.sitesdexception.fr/wp-content/uploads/2025/12/romains-goutte.png', className: "gallo-marker"});
+const monumentIcon = new mapIcon({iconUrl: 'https://www.sitesdexception.fr/wp-content/uploads/2025/11/Monuments-Goutte.png', className: "monuments-marker" });
+const grottesIcon = new mapIcon({iconUrl: 'https://www.sitesdexception.fr/wp-content/uploads/2025/11/Sites-geologique-Goutte.png', className: "grotte-marker"});
+const clusterIcon = new mapIcon({iconUrl: 'https://www.sitesdexception.fr/wp-content/plugins/wp_site-exception/assets/img/markers/cluster.png', className: "cluster-marker"});
+const vinIcon = new mapIcon({iconUrl: 'https://www.sitesdexception.fr/wp-content/uploads/2025/11/Vin-Goutte.png', className: "vin-marker"});
+const parcIcon= new mapIcon({iconUrl: 'https://www.sitesdexception.fr/wp-content/uploads/2025/11/Goutte-nature-V2-2.png', className: "parc-marker"});
+const detourIcon = new mapIcon({iconUrl: 'https://www.sitesdexception.fr/wp-content/uploads/2025/11/Ca-vaut-le-detour-Goutte.png', className: 'detour-marker'});
+const charmeIcon = new mapIcon({iconUrl: 'https://www.sitesdexception.fr/wp-content/uploads/2025/11/Hebergements-Goutte.png', className: 'charme-marker'});
+
+
+
+const laCiteDePierresPopup = new markerPop({content: createPopupContent("grotte", "LA CITÉ DE PIERRES", "lacitedepierres.com", "05 65 60 66 30", "https://lacitedepierres.com/?g-path=%2Fcart%2Factivities%2Fundefined", "https://www.sitesdexception.fr/sites/cite-de-pierres", "https://www.sitesdexception.fr/wp-content/uploads/2020/03/IMG_2353-HDR.jpg")});
+const grotteArmandPopup = new markerPop({content: createPopupContent("grotte", "GROTTE DE L'AVEN ARMAND", "www.aven-armand.com", "04 66 45 61 31", "https://avenarmand.com/billetterie/", "https://www.sitesdexception.fr/sites/grotte-de-laven-armand/", "https://www.sitesdexception.fr/wp-content/uploads/2020/03/066-Aven-Armand-2014-www.pixelsmillau.fr-copie.jpg")});
+const grotteDargilanPopup = new markerPop({content: createPopupContent("grotte", "GROTTE DE DARGILAN", "www.grotte-dargilan-48.com", "04 66 45 60 20", "https://www.grotte-dargilan-48.com/reserver.html", "https://www.sitesdexception.fr/sites/la-grotte-de-dargilan/", "https://www.sitesdexception.fr/wp-content/uploads/2020/02/IMG_1914-HDR-1000x667.jpg")});
+const grotteSalamandPopup = new markerPop({content: createPopupContent("grotte", "GROTTE DE LA SALAMANDRE", "www.grottedelasalamandre.com/fr/", "04 66 60 0 60 0", "https://www.grottedelasalamandre.com/fr/la-visite-guidee/", "https://www.sitesdexception.fr/sites/grotte-de-la-salamandre/", "https://www.sitesdexception.fr/wp-content/uploads/2020/01/IMG_6946.jpg")});
+const grotteBramabiauPopup = new markerPop({content: createPopupContent("grotte", "ABÎME DE BRAMABIAU – GROTTE ET RIVIÈRE SOUTERRAINE", "https://www.abime-de-bramabiau.com", "04 67 82 60 78", "no", "https://www.sitesdexception.fr/sites/abimes-de-bramabiau-riviere-souterraine/", "https://www.sitesdexception.fr/wp-content/uploads/2021/12/Bramabiau-2024.jpeg")});
+const grotteDemoisellesPopup = new markerPop({content: createPopupContent("grotte", "GROTTE DES DEMOISELLES", "www.demoiselles.com/fr", "04 67 73 70 02", "https://www.demoiselles.com/fr/billetterie", "https://www.sitesdexception.fr/sites/grotte-des-demoiselles/", "https://www.sitesdexception.fr/wp-content/uploads/2018/04/Grotte_des_Demoiselles_Emidio_Castri3.jpg")});
+const grotteTrabucPopup = new markerPop({content: createPopupContent("grotte", "GROTTE DE TRABUC", "www.grotte-de-trabuc.com", "04 66 85 03 28", "https://grotte-de-trabuc.com/tarifs-billetterie/", " https://www.sitesdexception.fr/sites/grotte-de-trabuc/", "https://www.sitesdexception.fr/wp-content/uploads/2020/02/IMG_7781-HDR.jpg")});
+
+
+
+const narboViaPopup = new markerPop({content: createPopupContent("gallo", "MUSÉE NARBO VIA", "narbovia.fr", "04 68 90 28 90", "https://narbovia.tickeasy.com/fr-FR/accueil", "https://www.sitesdexception.fr/sites/musee-narbo-via/", "https://www.sitesdexception.fr/wp-content/uploads/2023/12/galerie-lapidaire-musee-narbo-via.png")});
+const romanitePopup = new markerPop({content: createPopupContent("gallo", "MUSÉE DE LA ROMANITÉ", "museedelaromanite.fr", "04 48 21 0 21 0", "https://muroma.shop.secutix.com/content", "https://www.sitesdexception.fr/sites/musee-de-la-romanite", "https://www.sitesdexception.fr/wp-content/uploads/2021/02/©Stephane-Ramillon-Ville-de-Nimes-7-e1615471565664.jpg")});
+const arenesNimesPopupGallo = new markerPop({content: createPopupContent("gallo", "ARÈNES DE NÎMES", "www.arenes-nimes.com", "04 66 21 82 56", "https://www.arenes-nimes.com/spectacles-et-visites", "https://www.sitesdexception.fr/sites/arenes-de-nimes/", "https://www.sitesdexception.fr/wp-content/uploads/2019/02/©-La-Poze-2.jpg")});
+const ambrussumPopup = new markerPop({content: createPopupContent("gallo", "AMBRUSSUM – SITE ET MUSÉE ARCHÉOLOGIQUE", "www.ambrussum.fr", "04 67 02 22 33", "no", "https://www.sitesdexception.fr/sites/site-archeologique-et-musee-dambrussum/", "https://www.sitesdexception.fr/wp-content/uploads/2018/04/©vincent-Lauras-Nature-Passion-2.jpg")});
+const enserunePopup = new markerPop({content: createPopupContent("gallo", "ENSÉRUNE, SITE ARCHÉOLOGIQUE ET MUSÉE", "www.enserune.fr", "04 67 32 60 35", "https://tickets.monuments-nationaux.fr/fr-FR/familles?site=2136560814490401774", "https://www.sitesdexception.fr/sites/site-archeologique-et-musee-denserune/", "https://www.sitesdexception.fr/wp-content/uploads/2018/04/Ensérune-Quartier_artisanal@Rémi-Marion-CMN.jpg")});
+
+
+
+const brassensPopup = new markerPop({content: createPopupContent("musee", "ESPACE GEORGES BRASSENS", "www.espace-brassens.fr", "04 99 04 76 26", "https://www.espace-brassens.fr/boutique/billetterie-sete-espace-georges-brassens.html", "https://www.sitesdexception.fr/sites/espace-georges-brassens", "https://www.sitesdexception.fr/wp-content/uploads/2019/02/IMG_9646.jpg")});
+const mracPopup = new markerPop({content: createPopupContent("musee", "MUSÉE RÉGIONAL D'ART CONTEMPORAIN SÉRIGNAN (MRAC)", "mrac.laregion.fr", "04 67 17 88 95", "no", "https://www.sitesdexception.fr/sites/musee-regional-dart-contemporain-occitanie-pyrenees-mediterranee", "https://www.sitesdexception.fr/wp-content/uploads/2018/04/IMG_0826.jpg")});
+const verrePopup = new markerPop({content: createPopupContent("musee", "HALLE DU VERRE – MUSÉE DU VERRE", "www.grandpicsaintloup-tourisme.fr/patrimoine-culturel/halle-du-verre-claret", "04 67 59 06 39", "no", "https://www.sitesdexception.fr/sites/halle-du-verre-musee-du-verre/", "https://www.sitesdexception.fr/wp-content/uploads/2018/04/74-copie.jpg")});
+const consulPopup = new markerPop({content: createPopupContent("musee", "MAISON DES CONSULS – MUSÉE D'ARTS ET D'ARCHÉOLOGIE", "www.grandpicsaintloup-tourisme.fr/maisons-des-consuls", "04 99 63 25 46", "no", "https://www.sitesdexception.fr/sites/maison-des-consuls-musee-darts-et-darcheologie/", "https://www.sitesdexception.fr/wp-content/uploads/2018/04/Maison_des_consuls.jpg")});
+const lodevePopup = new markerPop({content: createPopupContent("musee", "MUSÉE DE LODÈVE", "www.museedelodeve.fr", "04 67 88 86 10", "https://boutique.museedelodeve.fr/billetterie", "https://www.sitesdexception.fr/sites/musee-de-lodeve/", "https://www.sitesdexception.fr/wp-content/uploads/2018/04/Accueilfamille©Vincent_Fillon.jpg")});
+const rougePopup = new markerPop({content: createPopupContent("musee", "MAISON ROUGE – MUSÉE DES VALLÉES CÉVENOLES", "www.maisonrouge-musee.fr", "04 66 85 10 48", "no", "https://www.sitesdexception.fr/sites/maison-rouge-musee-des-vallees-cevenoles/", "https://www.sitesdexception.fr/wp-content/uploads/2020/01/Maison-Rougedouble-archictecture-ext.jpg")});
+
+
+
+const valmagnePopup = new markerPop({content: createPopupContent("historical", "ABBAYE DE VALMAGNE", "www.valmagne.com", "04 67 78 47 32", "https://www.valmagne.com/evenement/visite-abbaye/", "https://www.sitesdexception.fr/sites/abbaye-de-valmagne/", "https://www.sitesdexception.fr/wp-content/uploads/2018/04/Abbaye_de_Valmagne_Credit_Emidio_Castri-2.jpg")});
+const arenesNimesPopup = new markerPop({content: createPopupContent("historical", "ARÈNES DE NÎMES", "www.arenes-nimes.com", "04 66 21 82 56", "https://www.arenes-nimes.com/spectacles-et-visites", "https://www.sitesdexception.fr/sites/arenes-de-nimes/", "https://www.sitesdexception.fr/wp-content/uploads/2019/02/©-La-Poze-2.jpg")});
+const chateauLaurensPopup = new markerPop({content: createPopupContent("historical", "LE CHÂTEAU LAURENS", "www.chateaulaurens-agde.fr", "09 71 00 53 00", "https://www.chateaulaurens-agde.fr/billetterie", "https://www.sitesdexception.fr/sites/le-chateau-laurens/", "https://www.sitesdexception.fr/wp-content/uploads/2023/02/Atrium_Maugendre-David_IGP-_Region-Occitanie-copie.jpg")});
+const pezenasPopup = new markerPop({content: createPopupContent("historical", "PÉZENAS, VILLE D'ART ET D'HISTOIRE", "www.capdagde.com", "04 67 98 36 40", "https://reservation.capdagde.com/visites-guidees.html", "https://www.sitesdexception.fr/sites/pezenas-ville-dart-et-dhistoire/", "https://www.sitesdexception.fr/wp-content/uploads/2018/09/Hotel-Lacoste-Pezenas_Office-de-tourisme-Cap-dagde-Méditerranée.jpg")});
+const cassanPopup = new markerPop({content: createPopupContent("historical", "CHÂTEAU-ABBAYE DE CASSAN", "www.chateau-cassan.com", "04 67 245 245", "https://www.chateau-cassan.com/boutique/", "https://www.sitesdexception.fr/sites/chateau-abbaye-de-cassan/", "https://www.sitesdexception.fr/wp-content/uploads/2018/04/untitled-7437.jpg")});
+const grandMontPopup = new markerPop({content: createPopupContent("historical", "LE PRIEURÉ SAINT MICHEL DE GRANDMONT", "www.prieure-grandmont.fr", "04 67 44 09 31", "no", "https://www.sitesdexception.fr/sites/prieure-de-grand…-de-costes-rouge/", "https://www.sitesdexception.fr/wp-content/uploads/2018/04/20584_00001-prieure-Saint-Michel-de-Grandmont-Soumont-photo-aspheries_792x527-1.jpg")});
+const fontcaudePopup = new markerPop({content: createPopupContent("historical", "ABBAYE DE FONTCAUDE", "www.abbaye-de-fontcaude.com", "04 67 38 23 85", "no", "https://www.sitesdexception.fr/sites/abbaye-de-fontcaude/", "https://www.sitesdexception.fr/wp-content/uploads/2025/01/Abbaye-de-Fontcaude-©Arnaud-Commune-6-1.png")});
+const magPopup = new markerPop({content: createPopupContent("historical", "PRESQU'ÎLE DE MAGUELONE", "www.compagnons-de-maguelone.org", "04 67 50 49 88", "www.boutique-maguelone.com", "https://www.sitesdexception.fr/sites/presquile-de-maguelone/", "https://www.sitesdexception.fr/wp-content/uploads/2025/01/Domaine-de-Maguelone-et-Cathedrale-@Arnaud-Commune-11.png")});
+const engarranPopup = new markerPop({content: createPopupContent("historical", "CHÂTEAU DE L'ENGARRAN", "www.chateau-engarran.com", "04 67 47 00 02", "www.chateau-engarran.com/visites/", " https://www.sitesdexception.fr/sites/chateau-de-lengarran/", "https://www.sitesdexception.fr/wp-content/uploads/2019/02/Chateau-Lengarran-@Arnaud-Commune-6.jpg")});
+const millauPopup = new markerPop({content: createPopupContent("historical", "VIADUC DE MILLAU", "www.leviaducdemillau.com", "05 65 61 61 54", "no", "https://www.sitesdexception.fr/sites/viaduc-de-millau/", "https://www.sitesdexception.fr/wp-content/uploads/2019/02/IMG_8526-1.jpg")});
+const templierPopup = new markerPop({content: createPopupContent("historical", "LES SITES TEMPLIERS ET HOSPITALIERS DU LARZAC", "www.tourisme-aveyron.com/fr/decouvrir/les-territoires-aveyron/templiers-hospitaliers", "05 65 62 23 64", "no", "https://www.sitesdexception.fr/sites/les-sites-templiers-et-hospitaliers-du-larzac/", "https://www.sitesdexception.fr/wp-content/uploads/2022/02/Ste-Eulalie-de-Cernon-1.jpg")});
+const sylvanesPopup = new markerPop({content: createPopupContent("historical", "ABBAYE DE SYLVANÈS", "www.sylvanes.com", "05 65 98 20 20", "no", "https://www.sitesdexception.fr/sites/abbaye-de-sylvanes/", "https://www.sitesdexception.fr/wp-content/uploads/2019/03/IMG_8828-1.jpg")});
+const lagrassePopup = new markerPop({content: createPopupContent("historical", "ABBAYE MÉDIÉVALE DE LAGRASSE", "www.abbayedelagrasse.fr", "04 68 43 15 99", "no", "https://www.sitesdexception.fr/sites/abbaye-medievale-de-lagrasse/", "https://www.sitesdexception.fr/wp-content/uploads/2023/11/L1310150-copie.jpg")});
+const fondFroidPopup = new markerPop({content: createPopupContent("historical", "ABBAYE DE FONTFROIDE", "www.fontfroide.com", "04 68 45 11 08", "https://fontfroide.tickeasy.com/fr-FR/accueil", "https://www.sitesdexception.fr/sites/abbaye-de-fontfroide/", "https://www.sitesdexception.fr/wp-content/uploads/2025/12/Abbaye-de-FontfroideABBAYE-DE-FONTFROIDE-Yann-Monel.jpg")});
+
+
+
+const valmagnePopupWine = new markerPop({content: createPopupContent("vin", "ABBAYE DE VALMAGNE", "www.valmagne.com", "04 67 78 47 32", "https://www.valmagne.com/evenement/visite-abbaye/", "https://www.sitesdexception.fr/sites/abbaye-de-valmagne/", "https://www.sitesdexception.fr/wp-content/uploads/2018/04/Abbaye_de_Valmagne_Credit_Emidio_Castri-2.jpg")});
+const noillyPopup = new markerPop({content: createPopupContent("vin", "MAISON NOILLY PRAT", "www.noillyprat.com/fr", "04 67 77 20 15", "https://www.noillyprat.com/fr/fr/visites/", "https://www.sitesdexception.fr/sites/maison-noilly-prat/", "https://www.sitesdexception.fr/wp-content/uploads/2018/04/Olivier-Octobre-2.jpg")});
+const engarranPopupWine = new markerPop({content: createPopupContent("vin", "CHÂTEAU DE L'ENGARRAN", "www.chateau-engarran.com", "04 67 47 00 02", "www.chateau-engarran.com/visites/", " https://www.sitesdexception.fr/sites/chateau-de-lengarran/", "https://www.sitesdexception.fr/wp-content/uploads/2019/02/Chateau-Lengarran-@Arnaud-Commune-6.jpg")});
+const magPopupWine = new markerPop({content: createPopupContent("vin", "PRESQU'ÎLE DE MAGUELONE", "www.compagnons-de-maguelone.org", "04 67 50 49 88", "www.boutique-maguelone.com", "https://www.sitesdexception.fr/sites/presquile-de-maguelone/", "https://www.sitesdexception.fr/wp-content/uploads/2025/01/Domaine-de-Maguelone-et-Cathedrale-@Arnaud-Commune-11.png")});
+const fondFroidPopupWine = new markerPop({content: createPopupContent("vin", "ABBAYE DE FONTFROIDE", "www.fontfroide.com", "04 68 45 11 08", "https://fontfroide.tickeasy.com/fr-FR/accueil", "https://www.sitesdexception.fr/sites/abbaye-de-fontfroide/", "https://www.sitesdexception.fr/wp-content/uploads/2025/12/Abbaye-de-FontfroideABBAYE-DE-FONTFROIDE-Yann-Monel.jpg")});
+
+
+
+const grandMontPopupParc = new markerPop({content: createPopupContent("parc", "LE PRIEURÉ SAINT MICHEL DE GRANDMONT", "www.prieure-grandmont.fr", "04 67 44 09 31", "no", "https://www.sitesdexception.fr/sites/prieure-de-grand…-de-costes-rouge/", "https://www.sitesdexception.fr/wp-content/uploads/2018/04/20584_00001-prieure-Saint-Michel-de-Grandmont-Soumont-photo-aspheries_792x527-1.jpg")});
+const valmagnePopupParc = new markerPop({content: createPopupContent("parc", "ABBAYE DE VALMAGNE", "www.valmagne.com", "04 67 78 47 32", "https://www.valmagne.com/evenement/visite-abbaye/", "https://www.sitesdexception.fr/sites/abbaye-de-valmagne/", "https://www.sitesdexception.fr/wp-content/uploads/2018/04/Abbaye_de_Valmagne_Credit_Emidio_Castri-2.jpg")});
+const bambouPopup = new markerPop({content: createPopupContent("parc", "BAMBOUSERAIE EN CÉVENNES", "www.bambouseraie.fr", "04 66 61 70 47", "https://reservation.elloha.com/?idPublication=27ff1fbf-25cd-4366-ba81-284c66f39094&idoi=2aef83ec-5316-45ca-8bd9-b9fbec57bc9f&culture=fr-FR&reload=1&searchFirstAvailableDates=1", "https://www.sitesdexception.fr/sites/la-bambouseraie-en-cevennes/", "https://www.sitesdexception.fr/wp-content/uploads/2019/01/IMG_1310-e1637230369802.jpg")});
+const magPopupParc = new markerPop({content: createPopupContent("parc", "PRESQU'ÎLE DE MAGUELONE", "www.compagnons-de-maguelone.org", "04 67 50 49 88", "www.boutique-maguelone.com", "https://www.sitesdexception.fr/sites/presquile-de-maguelone/", "https://www.sitesdexception.fr/wp-content/uploads/2025/01/Domaine-de-Maguelone-et-Cathedrale-@Arnaud-Commune-11.png")});
+const engarranPopupParc = new markerPop({content: createPopupContent("parc", "CHÂTEAU DE L'ENGARRAN", "www.chateau-engarran.com", "04 67 47 00 02", "www.chateau-engarran.com/visites/", " https://www.sitesdexception.fr/sites/chateau-de-lengarran/", "https://www.sitesdexception.fr/wp-content/uploads/2019/02/Chateau-Lengarran-@Arnaud-Commune-6.jpg")});
+
+
+
+
+const gassacPopup = new markerPop({content: createPopupContent("detour", "MAS DE DAUMAS GASSAC", "www.daumas-gassac.com/fr", "04 67 57 71 28", "no", "https://www.sitesdexception.fr/membres_associes/mas-de-daumas-gassac/", "https://www.sitesdexception.fr/wp-content/uploads/2019/01/DAUMASGASSAC_GuilhemCANAL24-1.jpg")});
+const dourbiePopup = new markerPop({content: createPopupContent("detour", "DOMAINE DE LA DOURBIE", "wwww.ladourbie.fr", "06 45 44 61 51", "https://ladourbie.fr/shop/", "https://www.sitesdexception.fr/membres_associes/domaine-de-la-dourbie/", "https://www.sitesdexception.fr/wp-content/uploads/2019/06/Oscar.jpg")});
+const roquePopup = new markerPop({content: createPopupContent("detour", "CHÂTEAU LA ROQUE – DOMAINE PIC SAINT-LOUP", "www.chateau-laroque.fr", "04 67 55 34 47", "no", "https://www.sitesdexception.fr/membres_associes/chateau-la-roque-domaine-pic-saint-loup/", "https://www.sitesdexception.fr/wp-content/uploads/2022/11/Chateau-Laroque-5.jpg")});
+const preignesPopup = new markerPop({content: createPopupContent("detour", "DOMAINE DE PREIGNES LE VIEUX", "www.preignes.com", "04 67 21 67 82", "https://www.preignes.com/visites-2/", "https://www.sitesdexception.fr/membres_associes/domaine-viticole-preignes-le-vieux/", "https://www.sitesdexception.fr/wp-content/uploads/2023/01/domaine-preignes-9.jpg")});
+const ouliviePopup = new markerPop({content: createPopupContent("detour", "DOMAINE DE L'OULIVIE", "www.oulivie.com", "04 67 67 07 80", "https://oulivie.com/boutique/", "https://www.sitesdexception.fr/membres_associes/domaine-de-loulivie/", "https://www.sitesdexception.fr/wp-content/uploads/2018/05/oulivie-LOR-JORDAN-SE.jpg")});
+const maisonMetiersPopup = new markerPop({content: createPopupContent("detour", "MAISON DES MÉTIERS D'ART DE PÉZENAS", "www.ateliersdart.com/action-economique/reseau-de-vente/la-maison-des-metiers-dart-de-pezenas/", "04 67 98 11 12", "no", "https://www.sitesdexception.fr/membres_associes/maison-des-metiers-dart-de-pezenas/", "https://www.sitesdexception.fr/wp-content/uploads/2023/02/Photos-Maison-des-Metiers-darts-Pezenas-2-©AlexGallosi-4231.jpg")});
+const savonPopup = new markerPop({content: createPopupContent("detour", "LA MANUFACTURE NATIONALE DE LA SAVONNERIE À LODÈVE", "www.tourisme-lodevois-larzac.fr/annuaire/manufacture-nationale-de-la-savonnerie-atelier-de-lodeve", "04 67 88 86 44", "https://boutique.tourisme-lodevois-larzac.fr/billetterie/visites-guidees-entrees/manufacture", "https://www.sitesdexception.fr/membres_associes/la-manufacture-nationale-de-la-savonnerie-de-lodeve/", "https://www.sitesdexception.fr/wp-content/uploads/2023/02/IMG_20230202_142058-1.jpg")});
+const puyPopup = new markerPop({content: createPopupContent("detour", "DOMAINE DU GRAND PUY", "www.domainedugrandpuy.fr", "04 11 28 22 30", "no", "https://www.sitesdexception.fr/membres_associes/domaine-du-grand-puy/", "https://www.sitesdexception.fr/wp-content/uploads/2020/03/Entree-domaine-GP-3-accueil-slide-1-1.jpg")});
+const etoileThauPopup = new markerPop({content: createPopupContent("detour", "L'ÉTOILE DE THAU IV – BATEAU PROMENADE MARSEILLAN", "www.promenade-bateau-marseillan.com", "06 03 23 73 65", "https://promenade-bateau-marseillan.com/contact-06-03-23-73-65/", "https://www.sitesdexception.fr/membres_associes/letoile-de-thau-iv-bateau-promenade-marseillan/", "https://www.sitesdexception.fr/wp-content/uploads/2022/02/DIANNE-E-515.jpg")});
+const soleilPopup = new markerPop({content: createPopupContent("detour", "LES BATEAUX DU SOLEIL", "www.bateaux-du-soleil.fr", "04 67 94 08 79", "https://www.dest-in.pro/activites/booking_module/827-444?cid=02bbd3-FFFFFF&lang=fra", "https://www.sitesdexception.fr/membres_associes/bateau-du-soleil/", "https://www.sitesdexception.fr/wp-content/uploads/2018/05/Capitan-Pont-des-Trois-Yeux-.jpg")});
+const pharePopup = new markerPop({content: createPopupContent("detour", "LE PHARE SAINT LOUIS DE SÈTE", "www.tourisme-sete.com/visite-du-phare-saint-louis-sete-1.html", "04 86 84 04 04", "no", "https://www.sitesdexception.fr/membres_associes/le-phare-saint-louis-de-sete/", "https://www.sitesdexception.fr/wp-content/uploads/2023/12/Visite_du_phare_Saint_Louis-R_Domergue_OT-THAU-20820.jpg")});
+const minervePopup = new markerPop({content: createPopupContent("detour", "MINERVE : CITÉ CATHARE ET PLUS BEAU VILLAGE DE FRANCE", "www.minervois-caroux.com/fr", "04 67 97 06 65", "https://www.minervois-caroux.com/fr/", "https://www.sitesdexception.fr/membres_associes/minerve/", "https://www.sitesdexception.fr/wp-content/uploads/2023/01/Minerve_31-07_2_sur_7.jpg")});
+const fumadePopup = new markerPop({content: createPopupContent("detour", "NOUGATERIE DES FUMADES", "www.nougaterie-fumades.com", "04 66 24 26 85", "https://www.nougaterie-fumades.com/13-nougats", "https://www.sitesdexception.fr/membres_associes/nougaterie-des-fumades/", "https://www.sitesdexception.fr/wp-content/uploads/2020/03/67841875_1237422659764153_1172707804759195648_o.jpg")});
+const vapeurPopup = new markerPop({content: createPopupContent("detour", "TRAIN À VAPEUR DES CÉVENNES", "www.trainavapeur.com", "04 66 60 59 00", "https://cevennes-mb-prestataire.for-system.com/z8501e3f10320x10320b2255o5037_fr-TRAIN-A-VAPEUR-DES-CEVENNES-ANDUZE-BAMBOUSERAIE-ST-JEAN-DU-GARD.aspx", "https://www.sitesdexception.fr/membres_associes/train-a-vapeur-des-cevennes/", "https://www.sitesdexception.fr/wp-content/uploads/2023/12/Train-Vapeur-Cevennes-.jpg")});
+const anduzePopup = new markerPop({content: createPopupContent("detour", "POTERIES D'ANDUZE – LES ENFANTS DE BOISSET", "www.poterie-anduze.fr", "04 66 61 80 86", "no", "https://www.sitesdexception.fr/membres_associes/vase-danduze-les-enfants-de-boisset/", "https://www.sitesdexception.fr/wp-content/uploads/2020/03/IMG_4871-HDR.jpg")});
+
+
+
+const biarPopup = new markerPop({content: createPopupContent("charme", "DOMAINE DE BIAR", "www.domainedebiar.com", "04 67 65 70 06", "https://booking.inncharge.io/?ressource=eodenbiar&instance=BIAR&iscocode=fr&display=calendar#!home", "https://www.sitesdexception.fr/membres_associes/domaine-de-biar/", "https://www.sitesdexception.fr/wp-content/uploads/2022/11/R0A2942.jpg")});
+const serjacPopup = new markerPop({content: createPopupContent("charme", "CHÂTEAU SAINT PIERRE DE SERJAC", "www.serjac.com/fr/hotel-spa-luxe-beziers-pezenas", "04 67 80 76 00", "https://www.serjac.com/fr/hotel-spa-luxe-beziers-pezenas#booking-sejour", "https://www.sitesdexception.fr/membres_associes/chateau-saint-pierre-de-serjac/", "https://www.sitesdexception.fr/wp-content/uploads/2022/12/Aerial-view-SERJAC.jpg")});
+const carrassesPopup = new markerPop({content: createPopupContent("charme", "CHÂTEAU LES CARRASSES", "www.lescarrasses.com/fr/chateau-hotel-location-villa-narbonne-beziers", "04 67 00 00 67", "https://www.lescarrasses.com/fr/chateau-hotel-location-villa-narbonne-beziers#booking-sejour", "https://www.sitesdexception.fr/membres_associes/chateau-les-carrasses/", "https://www.sitesdexception.fr/wp-content/uploads/2022/12/Chateau-summer-Chateau-les-Carrasse.jpg")});
+const combasPopup = new markerPop({content: createPopupContent("charme", "CHÂTEAU HERMITAGE DE COMBAS", "www.hermitagedecombas.com", "04 67 21 28 78", "https://www.secure-hotel-booking.com/smart/Chateau-Hermitage-de-Combas/JJ4N/fr/", "https://www.sitesdexception.fr/membres_associes/chateau-hermitage-de-combas/", "https://www.sitesdexception.fr/wp-content/uploads/2023/01/Chateau-mai-2023-HD-6M.jpg")});
+const albanPopup = new markerPop({content: createPopupContent("charme", "HÔTEL SAINT-ALBAN", "www.hotel-saintalban.com", "04 67 98 11 38", "https://hotel-saintalban.com/", "https://www.sitesdexception.fr/membres_associes/hotel-saint-alban-nezignan-leveque/", "https://www.sitesdexception.fr/wp-content/uploads/2022/11/chambre_02_01.jpg")});
+const solencierePopup = new markerPop({content: createPopupContent("charme", "DOMAINE DE LA SOLENCIÈRE", "www.solenciere.fr", "06 24 22 80 51", "https://www.solenciere.fr/reservation/", "https://www.sitesdexception.fr/membres_associes/domaine-de-la-solenciere/", "https://www.sitesdexception.fr/wp-content/uploads/2025/01/Solenciere-31.jpg")});
+const bellonettePopup = new markerPop({content: createPopupContent("charme", "DOMAINE LA BELLONETTE À MARSEILLAN", "www.labellonette.com", "06 16 42 23 64", "no", "https://www.sitesdexception.fr/membres_associes/domaine-la-bellonette/", "https://www.sitesdexception.fr/wp-content/uploads/2023/11/DJI_20240621091135_0076_D.jpg")});
+const kumquatsPopup = new markerPop({content: createPopupContent("charme", "VILLA KUMQUATS, CHAMBRES ET TABLE D'HÔTES URBAINES", "www.villakumquats.com", "06 59 53 89 25", "https://www.booking.com/hotel/fr/villa-kumquats-beziers.fr.html", "https://www.sitesdexception.fr/membres_associes/villa-kumquats-chambres-et-table-dhotes-urbaines/", "https://www.sitesdexception.fr/wp-content/uploads/2023/01/Villa-Kumquats-2.jpg")});
+const parcPezenasPopup = new markerPop({content: createPopupContent("charme", "CHÂTEAU DU PARC PÉZENAS", "www.giteshautdegamme-spa-chateau-herault.com/fr-fr/", "07 56 41 49 06", "https://chateauduparc.amenitiz.io/fr/booking/room", "https://www.sitesdexception.fr/membres_associes/chateau-du-parc-pezenas/", "https://www.sitesdexception.fr/wp-content/uploads/2024/12/Chateau-du-parc-PezenasDSC_9372_DxO.png")});
+const siranPopup = new markerPop({content: createPopupContent("charme", "CHÂTEAU DE SIRAN – HÔTEL 4 ÉTOILES", "www.chateau-de-siran.com/fr/", "04 68 91 55 98", "https://chateaudesiran.thais-hotel.com/direct-booking/calendar?_ga=2.208233298.1907476120.1743164220-365754265.1743164220", "https://www.sitesdexception.fr/membres_associes/chateau-de-siran-hotel-4-etoiles/", "https://www.sitesdexception.fr/wp-content/uploads/2025/03/chateau-de-Siran-Exterieur.jpeg")});
+const jullianPopup = new markerPop({content: createPopupContent("charme", "MAISON JULLIAN – MAISON D'HÔTES DE CHARME & RESTAURANT", "www.maisonjullian.com", "06 16 13 33 48", "https://maisonjullian.com", "https://www.sitesdexception.fr/membres_associes/maison-jullian-maison-dhotes-de-charme-restaurant/", "https://www.sitesdexception.fr/wp-content/uploads/2025/04/1_Maison-Jullian-Facade.jpg")});
+const piscinePopup = new markerPop({content: createPopupContent("charme", "CHÂTEAU DE LA PISCINE", "www.chateaudelapiscine.com", "06 58 92 40 41", "https://masduchateau.com/", "https://www.sitesdexception.fr/membres_associes/chateau-de-la-piscine/", "https://www.sitesdexception.fr/wp-content/uploads/2025/06/DSC6904©BricePelleschi8©BricePelleschi32.jpg")});
+const passagePopup = new markerPop({content: createPopupContent("charme", "LA MAISON DU PASSAGE", "www.lamaisondupassage.fr", "04 66 25 62 91", "https://www.lamaisondupassage.fr/tarifs-des-chambres-d-hotes-de-chambres-pres-ales.html", "https://www.sitesdexception.fr/membres_associes/la-maison-du-passage/", "https://www.sitesdexception.fr/wp-content/uploads/2024/04/Chambre-2.jpg")});
+const zenPopup = new markerPop({content: createPopupContent("charme", "CHÂTEAU ZEN – HÔTEL SPA", "www.chateauzen.com", "04 67 71 85 38", "https://via.eviivo.com/fr-FR/ChateauMadieresZen", "https://www.sitesdexception.fr/membres_associes/chateau-zen-hotel-spa/", "https://www.sitesdexception.fr/wp-content/uploads/2023/01/Photos-chambres-pour-site-2022b-15k-30.jpg")});
+const bouqueriePopup = new markerPop({content: createPopupContent("charme", "LA BOUQUERIE LAGRASSE", "www.bouquerielagrasse.com", "06 77 20 34 43 ", "https://booking.roomraccoon.fr/bouquerie/fr/", "https://www.sitesdexception.fr/membres_associes/la-bouquerie-lagrasse/", "https://www.sitesdexception.fr/wp-content/uploads/2023/11/Bouquerie-1-1.jpg-1.jpg")});
+
+
+
+let markerArray = [
+  [43.28026450000001, 3.280872199999976, museesIcon, mracPopup, "MUSÉE RÉGIONAL D'ART CONTEMPORAIN SÉRIGNAN (MRAC)"],
+  [43.179489192279725, 3.0190783306860656, galloIcon, narboViaPopup, "MUSÉE NARBO VIA"],
+  [43.487293, 3.562322999999992, parcIcon, valmagnePopupParc, "ABBAYE DE VALMAGNE"],
+  [43.487293, 3.562322999999992, vinIcon, valmagnePopupWine, "ABBAYE DE VALMAGNE"],
+  [43.487293, 3.562322999999992, monumentIcon, valmagnePopup, "ABBAYE DE VALMAGNE"],
+  [44.13694381713867, 3.2027781009674072, grottesIcon, laCiteDePierresPopup, "LA CITÉ DE PIERRES"],
+  [44.2446149,4.3481103, grottesIcon, grotteSalamandPopup, "GROTTE DE LA SALAMANDRE"],
+  [44.122563,3.480083, grottesIcon, grotteBramabiauPopup, "ABÎME DE BRAMABIAU – GROTTE ET RIVIÈRE SOUTERRAINE"],
+  [43.50949900000001, 3.2887309999999843, monumentIcon, cassanPopup, "CHÂTEAU-ABBAYE DE CASSAN"],
+  [43.4179596,3.0552979999999934, monumentIcon, fontcaudePopup, "ABBAYE DE FONTCAUDE"],
+  [43.523373, 3.9201100000000224, parcIcon, magPopupParc, "PRESQU'ÎLE DE MAGUELONE"],
+  [43.523373, 3.9201100000000224, vinIcon, magPopupWine, "PRESQU'ÎLE DE MAGUELONE"],
+  [43.523373, 3.9201100000000224, monumentIcon, magPopup, "PRESQU'ÎLE DE MAGUELONE"],
+  [44.095306396484375,3.0227904319763184, monumentIcon, millauPopup, "VIADUC DE MILLAU"],
+  [43.92146568495831, 3.3181774072878345, monumentIcon, templierPopup, "LES SITES TEMPLIERS ET HOSPITALIERS DU LARZAC"],
+  [43.8343,2.95903, monumentIcon, sylvanesPopup, "ABBAYE DE SYLVANÈS"],
+  [43.719023,4.147999400000003, galloIcon, ambrussumPopup, "AMBRUSSUM – SITE ET MUSÉE ARCHÉOLOGIQUE"],
+  [43.31078249999999,3.1162632000000485, galloIcon, enserunePopup, "ENSÉRUNE, SITE ARCHÉOLOGIQUE ET MUSÉE"],
+  [43.9074752,3.744297299999971, grottesIcon, grotteDemoisellesPopup, "GROTTE DES DEMOISELLES"],
+  [43.6619659,3.5885073, detourIcon, gassacPopup, "MAS DE DAUMAS GASSAC"],
+  [43.5844618, 3.4756934, detourIcon, dourbiePopup, "DOMAINE DE LA DOURBIE"],
+  [43.3263153676274, 3.3780265336645887, detourIcon, preignesPopup, "DOMAINE DE PREIGNES LE VIEUX"],
+  [43.726215,3.324222, detourIcon, savonPopup, "LA MANUFACTURE NATIONALE DE LA SAVONNERIE À LODÈVE"],
+  [43.354790225368745, 2.745875224107929, detourIcon, minervePopup, "MINERVE : CITÉ CATHARE ET PLUS BEAU VILLAGE DE FRANCE"],
+  [44.206860858828804,4.242339986162196, detourIcon, fumadePopup, "NOUGATERIE DES FUMADES"],
+  [43.471415698396896, 3.250763380389678, charmeIcon, serjacPopup, "CHÂTEAU SAINT PIERRE DE SERJAC"],
+  [43.3445185341732, 3.0235516334083363, charmeIcon, carrassesPopup, "CHÂTEAU LES CARRASSES"],
+  [43.43732158975271, 3.3285579471594215, charmeIcon, combasPopup, "CHÂTEAU HERMITAGE DE COMBAS"],
+  [43.392277413974476, 3.55825341534412, charmeIcon, bellonettePopup, "DOMAINE LA BELLONETTE À MARSEILLAN"],
+  [43.482211171217614, 3.3951512869627445, charmeIcon, parcPezenasPopup, "CHÂTEAU DU PARC PÉZENAS"],
+  [43.3128743,2.6624343, charmeIcon, siranPopup, "CHÂTEAU DE SIRAN – HÔTEL 4 ÉTOILES"],
+  [44.090980146271455, 4.184809522780588, charmeIcon, passagePopup, "LA MAISON DU PASSAGE"],
+  [43.85577218970319, 3.5632381822763115, charmeIcon, zenPopup, "CHÂTEAU ZEN – HÔTEL SPA"],
+  [43.14408418902019, 2.898674023006596, vinIcon, fondFroidPopupWine, "ABBAYE DE FONTFROIDE"],
+  [43.14408418902019, 2.898674023006596, monumentIcon, fondFroidPopup, "ABBAYE DE FONTFROIDE"],
+  [44.2208849, 3.3570454, grottesIcon, grotteArmandPopup, "GROTTE DE L'AVEN ARMAND"],
+  [44.1964717, 3.3778936, grottesIcon, grotteDargilanPopup, "GROTTE DE DARGILAN"],
+  [43.8349,4.359630000000038, monumentIcon, arenesNimesPopup, "ARÈNES DE NÎMES"],
+  [43.8349,4.359630000000038, galloIcon, arenesNimesPopupGallo, "ARÈNES DE NÎMES"],
+  [43.834251403808594,4.359200477600098, galloIcon, romanitePopup, "MUSÉE DE LA ROMANITÉ"],
+  [43.734132, 3.3689540000000306, parcIcon ,grandMontPopupParc, "LE PRIEURÉ SAINT MICHEL DE GRANDMONT"],
+  [43.734132, 3.3689540000000306, monumentIcon, grandMontPopup, "LE PRIEURÉ SAINT MICHEL DE GRANDMONT"],
+  [43.7318603,3.319902299999967, museesIcon, lodevePopup, "MUSÉE DE LODÈVE"],
+  [44.108599893525295, 3.9592536423274947, grottesIcon, grotteTrabucPopup, "GROTTE DE TRABUC"],
+  [44.1040562,3.8855869, museesIcon, rougePopup, "MAISON ROUGE – MUSÉE DES VALLÉES CÉVENOLES"],
+  [44.06933799999999,3.9789740999999594, parcIcon, bambouPopup, "BAMBOUSERAIE EN CÉVENNES"],
+  [43.35310399999999,3.532320000000027, vinIcon, noillyPopup, "MAISON NOILLY PRAT"],
+  [43.35819444314835, 3.533083293221044, detourIcon, etoileThauPopup, "L'ÉTOILE DE THAU IV – BATEAU PROMENADE MARSEILLAN"],
+  [43.79606663183797, 3.899158696139368, detourIcon, roquePopup, "CHÂTEAU LA ROQUE – DOMAINE PIC SAINT-LOUP"],
+  [43.86074099999999,3.9059720000000198, museesIcon, verrePopup, "HALLE DU VERRE – MUSÉE DU VERRE"],
+  [43.3133226,3.4677189000000226, detourIcon, soleilPopup, "LES BATEAUX DU SOLEIL"],
+  [43.315491,3.468685, monumentIcon, chateauLaurensPopup, "LE CHÂTEAU LAURENS"],
+  [43.39687277681779, 3.7017558830777104, detourIcon, pharePopup, "LE PHARE SAINT LOUIS DE SÈTE"],
+  [43.4028, 3.6928, museesIcon, brassensPopup, "ESPACE GEORGES BRASSENS"],
+  [44.05072781261595, 3.9842389656290838, detourIcon, vapeurPopup, "TRAIN À VAPEUR DES CÉVENNES"],
+  [44.05852127075195, 3.974379062652588, detourIcon, anduzePopup, "POTERIES D'ANDUZE – LES ENFANTS DE BOISSET"],
+  [43.59661766346877, 3.8147436180764918, charmeIcon, biarPopup, "DOMAINE DE BIAR"],
+  [43.5977465,3.8069061999999576, parcIcon, engarranPopupParc, "CHÂTEAU DE L'ENGARRAN" ],
+  [43.5977465,3.8069061999999576, vinIcon, engarranPopupWine, "CHÂTEAU DE L'ENGARRAN"],
+  [43.5977465,3.8069061999999576, monumentIcon, engarranPopup, "CHÂTEAU DE L'ENGARRAN"],
+  [43.41973222372712, 3.40768963341075, charmeIcon, albanPopup, "HÔTEL SAINT-ALBAN"],
+  [43.41469464029691, 3.4138958512144635, charmeIcon, solencierePopup, "DOMAINE DE LA SOLENCIÈRE"],
+  [43.4621362,3.423898300000019, monumentIcon, pezenasPopup, "PÉZENAS, VILLE D'ART ET D'HISTOIRE"],
+  [43.46103409907373, 3.422799399044522, detourIcon, maisonMetiersPopup, "MAISON DES MÉTIERS D'ART DE PÉZENAS"],
+  [43.33630323571367, 3.2221452959157064, charmeIcon, jullianPopup, "MAISON JULLIAN"],
+  [43.34591203926485, 3.2256292334083847, charmeIcon, kumquatsPopup, "VILLA KUMQUATS, CHAMBRES ET TABLE D'HÔTES URBAINES"],
+  [43.61274612730443, 3.8413474130394767, charmeIcon, piscinePopup, "CHÂTEAU DE LA PISCINE"],
+  [43.61092,3.87723, detourIcon, puyPopup, "DOMAINE DU GRAND PUY"],
+  [43.090911865234375, 2.619086980819702, charmeIcon, bouqueriePopup, "LA BOUQUERIE LAGRASSE"],
+  [43.0906641,2.6171883, monumentIcon, lagrassePopup, "ABBAYE MÉDIÉVALE DE LAGRASSE"],
+  [43.674831,3.794503999999961, detourIcon, ouliviePopup, "DOMAINE DE L'OULIVIE"],
+  [43.73104,3.809933199999932, museesIcon, consulPopup, "MAISON DES CONSULS – MUSÉE D'ARTS ET D'ARCHÉOLOGIE"],
+]
+
+
+let fullArray = [
+  [43.28026450000001, 3.280872199999976,'https://www.sitesdexception.fr/wp-content/uploads/2025/11/Musees-Goutte.png', "musees-marker", "musee", "MUSÉE RÉGIONAL D'ART CONTEMPORAIN SÉRIGNAN (MRAC)", "mrac.laregion.fr", "04 67 17 88 95", "no", "https://www.sitesdexception.fr/sites/musee-regional-dart-contemporain-occitanie-pyrenees-mediterranee", "https://www.sitesdexception.fr/wp-content/uploads/2018/04/IMG_0826.jpg"],
+  [43.179489192279725, 3.0190783306860656, 'https://www.sitesdexception.fr/wp-content/uploads/2025/12/romains-goutte.png', "gallo-marker", "gallo", "MUSÉE NARBO VIA", "narbovia.fr", "04 68 90 28 90", "https://narbovia.tickeasy.com/fr-FR/accueil", "https://www.sitesdexception.fr/sites/musee-narbo-via/", "https://www.sitesdexception.fr/wp-content/uploads/2023/12/galerie-lapidaire-musee-narbo-via.png"],
+  [43.487293, 3.562322999999992, parcIcon, valmagnePopupParc, "parc", "ABBAYE DE VALMAGNE", "www.valmagne.com", "04 67 78 47 32", "https://www.valmagne.com/evenement/visite-abbaye/", "https://www.sitesdexception.fr/sites/abbaye-de-valmagne/", "https://www.sitesdexception.fr/wp-content/uploads/2018/04/Abbaye_de_Valmagne_Credit_Emidio_Castri-2.jpg"],
+  [43.487293, 3.562322999999992, vinIcon, valmagnePopupWine, "vin", "ABBAYE DE VALMAGNE", "www.valmagne.com", "04 67 78 47 32", "https://www.valmagne.com/evenement/visite-abbaye/", "https://www.sitesdexception.fr/sites/abbaye-de-valmagne/", "https://www.sitesdexception.fr/wp-content/uploads/2018/04/Abbaye_de_Valmagne_Credit_Emidio_Castri-2.jpg"],
+  [43.487293, 3.562322999999992, monumentIcon, "historical", "ABBAYE DE VALMAGNE", "www.valmagne.com", "04 67 78 47 32", "https://www.valmagne.com/evenement/visite-abbaye/", "https://www.sitesdexception.fr/sites/abbaye-de-valmagne/", "https://www.sitesdexception.fr/wp-content/uploads/2018/04/Abbaye_de_Valmagne_Credit_Emidio_Castri-2.jpg"],
+]
+
+
+
+var clusterPoints = {};
+
+var markersToGoOnMapOutsideOfClusterArray = [];
+
+
+function decideWhetherToPutMarkerIntoCluster() {
+    let clusterCollection = [];
+    for (let i = 0; i < markerArray.length; i++) {
+        let cluster = false;
+        for (let j = i+1; j < markerArray.length; j++) {
+            const start = {
+              latitude: markerArray[i][0],
+              longitude: markerArray[i][1]
+            };
+
+            const destination = {
+              latitude: markerArray[j][0],
+              longitude: markerArray[j][1]
+            };
+
+            let dist = calculateDistance(start, destination);
+        
+            if (+dist.toFixed(2) > 0.00 && +dist.toFixed(2) < 8.00) {
+                console.log(markerArray[j]);
+                console.log(markerArray[i]);
+            }
+            }
+    
+    }
+
+    console.log(clusterCollection);
+
+}
+
+decideWhetherToPutMarkerIntoCluster();
+
+function checkClusterDistances() {
+    clustersArray.forEach(cluster => {
+      for (var i = 0; i <clusterPoints[cluster].length; i++) {
+        var a = clusterPoints[cluster][i];
+        let next = i+1;
+        let a2 = clusterPoints[cluster][next];
+
+        if (a2 != undefined) {
+          const start = {
+          latitude: a[0],
+          longitude: a[1]
+        };
+
+        const destination = {
+          latitude: a2[0],
+          longitude: a2[1]
+        };
+
+        let dist = calculateDistance(start, destination);
+        console.log(`${cluster}: ${dist.toFixed(2)}`);
+        }
+
+  };
+    });
+}
+
+
+function degToRad(deg) {
+  var rad = (deg * Math.PI)/180;
+  return rad;
+}
+
+// Calculate distance between two coordinates
+function calculateDistance(startCoords, destCoords) {
+  const startingLat = degToRad(startCoords.latitude);
+  const startingLong = degToRad(startCoords.longitude);
+  const destinationLat = degToRad(destCoords.latitude);
+  const destinationLong = degToRad(destCoords.longitude);
+
+  // Radius of the Earth (in kilometers)
+  const radius = 6371;
+
+  // Haversine formula
+  const distance = Math.acos(
+    Math.sin(startingLat) * Math.sin(destinationLat) +
+    Math.cos(startingLat) * Math.cos(destinationLat) *
+    Math.cos(startingLong - destinationLong)
+  ) * radius;
+
+  return distance;
+}
+
+let clusterGroupArray = [];
+
+let markerIdAndNameArray = []
+
+let filterSection = document.querySelector('.filter_group');
+
+filterSection.addEventListener("click", (e) => { if (e.target.getAttribute('class') === 'checkbox-input') { dealWithClicks(e) }} );
+
+
+function populateMap() {
+  let activeChecks = getActiveCheckboxes();
+  filterListOfSites(activeChecks);
+  createClusters(activeChecks);
+  addMarkersToMap(activeChecks);
+}
+
+populateMap();
+
+function filterListOfSites(activeChecks) {
+console.log(activeChecks);
+let sites = document.querySelectorAll('.list_item');
+console.log(sites);
+for (const site of sites) {
+    let inner = site.innerHTML;
+    let display = false;
+    for (const check of activeChecks) {
+      let doesItHaveCheck = inner.includes(check);
+      if (doesItHaveCheck) {
+        display = true;
+      }
+    }
+    if (display) {
+        site.style.display = "block";
+    } else if (!display) {
+        site.style.display = "none";
+    }
+}
+
+}
+
+
+
+function addMarkersToMap(activeChecks) {
+  markerIdAndNameArray = [];
+  for (const marker of markerArray) {
+    let currentMarker = marker;
+    let markerIcon = currentMarker[2];
+    let markerClassName = markerIcon.options.className;
+    let markerTitle = currentMarker[4];
+
+    if (activeChecks.includes(markerClassName)) {
+      let markerToBePutOntoMap = L.marker([currentMarker[0], currentMarker[1]], {icon: markerIcon}).bindPopup(currentMarker[3]);
+      let markerContent = markerToBePutOntoMap._popup.options.content;
+      markerToBePutOntoMap.addTo(map);
+
+
+    };
+    }
+
+
+function groupById(array) {
+  return array.reduce((obj, value) => {
+    obj[value.markerTitle] = value;
+    return obj;
+  }, {});
+}
+  }
+
+
+  
+
+
+
+function createClusters(activeCheckBoxes) {
+ 
+ let clustersArray = Object.keys(clusterPoints);
+
+
+
+ 
+ clusterGroupArray = [];
+
+
+
+ clustersArray.forEach(cluster => {
+    let clusterGroup = L.markerClusterGroup();
+    clusterGroupArray.push(clusterGroup);
+    addClustersToMap(cluster, clusterGroup, activeCheckBoxes);
+ });
+}
+
+
+function addClustersToMap(cluster, clusterGroup, activeCheckBoxes) {
+  for (var i = 0; i <clusterPoints[cluster].length; i++) {
+    var a = clusterPoints[cluster][i];
+    var markerIcon = a[2];
+    var className = markerIcon.options.className;
+
+    if (activeCheckBoxes.includes(className)) {
+      var marker = L.marker([a[0], a[1]], {icon: markerIcon}).bindPopup(a[3]);
+      clusterGroup.addLayer(marker);
+    };
+  };
+  map.addLayer(clusterGroup);
+
+}
+
+function getActiveCheckboxes() {
+ let checkboxes = document.querySelectorAll('input[type="checkbox"]');
+ let activeCheckBoxArray = [];
+
+
+ for (const checkbox of checkboxes) {
+  if (checkbox.checked) {
+    activeCheckBoxArray.push(`${checkbox.id}-marker`);
+  }
+ }
+ return activeCheckBoxArray;
+}
+
+
+function dealWithClicks(e) {
+
+  if (e.target.id === 'tout') {
+    let allCheckboxes = document.querySelectorAll('input[type="checkbox"]');
+    let isToutButtonChecked = e.target.checked ? true : false;
+    if (isToutButtonChecked) {
+     for (const checkbox of allCheckboxes) {
+      if (!checkbox.checked) {
+        checkbox.click();
+      };
+    }
+    } else if (!isToutButtonChecked) {
+      for (const checkbox of allCheckboxes) {
+        if (checkbox.checked) {
+          checkbox.click();
+        }
+      }
+    }
+
+  }
+
+  removeClusters();
+  removeMarkers();
+  populateMap();
+}
+
+function removeClusters() {
+  for (group of clusterGroupArray) {
+    group.clearLayers()
+  }
+}
+
+function removeMarkers() {
+  let markers = document.querySelectorAll('.leaflet-marker-icon');
+  console.log({markersLength: markers.length});
+  if (markers.length > 0) {
+    for (const marker of markers) {
+      marker.remove();
+    }
+    }
+}
+
+
+let leafletMarkersForClickStyling = document.querySelectorAll('.leaflet-marker-icon');
+
+for (const leafletMarker of leafletMarkersForClickStyling) {
+  let currentStyle = leafletMarker.getAttribute("style");
+  leafletMarker.setAttribute("style", `${currentStyle} border-radius: 90%`);
+  let newStyleNow = leafletMarker.getAttribute("style");
+}
+
+
+
+listOfSites.addEventListener('mouseover', popUpMarkerBasedOnListHover);
+listOfSites.addEventListener('mouseleave', resetTheMapAfterMouseLeaveEvent);
+
+function resetTheMapAfterMouseLeaveEvent() {
+    removeMarkers();
+    populateMap();
+};
+
+function popUpMarkerBasedOnListHover(e) {
+    window.dispatchEvent(new Event("resize"));
+    if (e.target.parentElement.className === 'row') {
+        let rowElement = e.target.parentElement;
+        let titleSelector = rowElement.querySelector('h4 > span');
+        let title = titleSelector.innerText;
+        let titleToUpperCase = title.toUpperCase().trim();
+        let titleInBrackets = titleToUpperCase;
+
+         removeClusters();
+         removeMarkers();
+         let activeCheckBoxes = getActiveCheckboxes();
+
+         let markerAdded = false;
+      
+        for (const marker of markerArray) {
+            if (marker[4] === titleInBrackets) {
+                let theMarkerIcon = marker[2];
+                let theMarkerClassName = theMarkerIcon.options.className;
+                if (activeCheckBoxes.includes(theMarkerClassName)) {
+                    let markerForMap = L.marker([marker[0], marker[1]], {icon: theMarkerIcon}).bindPopup(marker[3]);
+                    markerForMap.addTo(map);
+                    markerAdded = true;
+                     var latLngs = [ markerForMap.getLatLng() ];
+                     let lat = latLngs[0].lat;
+                     let long = latLngs[0].lng;
+                     map.panTo([lat, long]);               
+                }
+            }
+        }
+
+        if (!markerAdded) {
+            let clusterPointsToArray = Object.keys(clusterPoints);
+            clusterPointsToArray.forEach(cluster => {
+                for (var i = 0; i <clusterPoints[cluster].length; i++) {
+                    var a = clusterPoints[cluster][i];
+                    console.log(a[4], titleInBrackets);
+                    var markerIcon = a[2];
+                    var className = markerIcon.options.className;
+
+                    if (activeCheckBoxes.includes(className) && a[4] === titleInBrackets) {
+                      var marker = L.marker([a[0], a[1]], {icon: markerIcon}).bindPopup(a[3]);
+                      marker.addTo(map);
+                      markerAdded = true;
+                      var latLngs = marker.getLatLng();
+                      let lat = latLngs.lat;
+                      let long = latLngs.lng;
+                      map.panTo([lat, long]);
+                    };
+  };
+                
+            });
+        }
+    }
+
+
+
+}
+
+setTimeout(function () {
+   window.dispatchEvent(new Event("resize"));
+}, 2000);
+
+</script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,956 @@
+<html lang="en">
+<head>
+	<base target="_top">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	
+	<title>Quick Start - Leaflet</title>
+	
+	<link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
+  <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
+    
+
+	<style>
+		html, body {
+		height: 100vh;
+	    margin: 0;
+        font-family: lato;
+		}
+
+        #map {
+            width: 800px; 
+            height: 700px;
+        }
+
+        span:hover {
+            color: #C18D0C;
+        }
+
+        button:hover {
+            background-color: #C18D0C;
+        }
+
+		.leaflet-container {
+			min-height: 700px;
+			min-width: 800px;
+			max-width: 100vw;
+			max-height: 100vh;
+		}
+
+  .leaflet-popup-content {
+    line-height: 1.5;
+  }
+
+    #historical {
+      color:  #D38E00;
+    }
+
+    #grotte {
+      color: #846767;
+    }
+
+    #musee {
+      color: #CD460D;
+    }
+
+    #vin {
+      color: #A51E33;
+    }
+
+    #parc {
+      color: #48743E;
+    }
+
+    #gallo {
+      color: #9f6800;
+    }
+
+    #detour, #charme {
+      color: #292972;
+    }
+
+    .flex-section-div {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .flex-section-image-div > a > img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+
+    .leaflet-container a {
+      color: #a51d34 !important;
+      text-decoration: none;
+      font-size: 0.8rem;
+    }
+
+  
+
+    .flex-section-image-div {
+      width: 80%;
+    }
+
+    .flex-section-text-div-list-section > ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .flex-section-text-div {
+      width: 100%;
+    }
+
+    .know-more-button {
+      background-color: #a71d34;
+      color: white;
+      border: none;
+      padding: 8px;
+      font-size: 0.6rem;
+    }
+
+    .flex-section-text-div-button-section {
+      text-align: right;
+    }
+
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 48px;
+  height: 28px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + #grotte {
+  background-color:#846767;
+}
+
+input:focus + #grotte {
+  box-shadow: 0 0 1px #846767;
+}
+
+input:checked + #musees {
+  background-color: #CD460D;
+}
+
+input:focus + #musees {
+  box-shadow: 0 0 1px #CD460D;
+}
+
+input:checked + #monuments {
+  background-color: #D38E00;
+}
+
+input:focus + #monuments {
+  box-shadow: 0 0 1px #D38E00;
+}
+
+input:checked + #gallo {
+  background-color: #9f6800;
+}
+
+input:focus + #gallo {
+  box-shadow: 0 0 1px #9f6800;
+}
+
+input:checked + #parc {
+  background-color: #48743E;
+}
+
+input:focus + #parc {
+  box-shadow: 0 0 1px #48743E;
+}
+
+input:checked + #vin {
+  background-color: #A51E33;
+}
+
+input:focus + #vin {
+  box-shadow: 0 0 1px #A51E33;
+}
+
+input:checked + #detour {
+  background-color: #292972;
+}
+
+input:focus + #detour {
+  box-shadow: 0 0 1px #292972;
+}
+
+
+input:checked + #charme {
+  background-color: #292972;
+}
+
+input:focus + #charme {
+  box-shadow: 0 0 1px #292972;
+}
+
+
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+.filter_group {
+  display: flex;
+}
+
+.filter_toggle_group {
+  display: flex;
+  align-items: center;
+}
+
+.filter_toggle_group_boundary {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: 20%;
+}
+
+.filter_toggle_group_boundary p {
+  text-align: center;
+  margin-top: 0;
+}
+
+.filter_img {
+  height: 50px;
+  width: 50px;
+}
+
+#uncheck-all-group {
+  justify-content: center;
+}
+
+.filter-section {
+  margin-right: 20px;
+  margin-left: 20px;
+  margin-top: 20px;
+}
+
+.main-section {
+  display: flex;
+}
+
+#list, #list_container {
+  max-height: 700px;
+  overflow: scroll;
+  flex: 1;
+}
+
+#list_container {
+    height: 800px;
+    overflow-y: auto;
+    padding: 0 10px 0 20px;
+    overflow-x: hidden;
+}
+
+.list_item {
+  display: none;
+  height: 120px;
+  margin-bottom: 10px;
+  background-color: #fafafa;
+  box-shadow: #0000002b 3px 3px 5px;
+  padding-right: 15px;
+  text-decoration: none;
+}
+
+.row {
+    display: flex;
+    margin-right: -15px;
+    margin-left: -15px;
+}
+
+.image-section {
+    min-width: 30%;
+    background-size: cover;
+    height: 120px;
+}
+
+.list_item .content_part {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-left: 10px;
+    padding-bottom: 10px;
+}
+
+
+.list_item .taxonomy_pictos .filter_img {
+    width: 40px;
+    height: 40px;
+}
+
+.list_item h4 {
+    margin-top: 0px;
+    margin-bottom: 0px;
+    font-size: 16px;
+    line-height: 20px;
+    transition: 0.4s all;
+    color: #1a171b;
+    font-weight: 500;
+    overflow-wrap: break-word;
+}
+
+.list_item .bottom_part {
+    font-size: 13px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    color: #1a171b;
+}
+
+.map-title {
+    text-align: center;
+    margin-top: 40px;
+    font-weight: 600;
+    color: #a51d34;
+}
+
+.marker-cluster-small div, .marker-cluster-small {
+	background-color: rgba(193, 141, 12, 0.6);
+}
+
+
+
+@media only screen and (max-width: 900px) {
+    .main-section {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    }
+
+    .filter-section {
+        display: flex;
+        justify-content: center;
+    }
+
+    .filter_group {
+    flex-direction: column;
+    }
+
+    .filter_toggle_group_boundary {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    width: 100%;
+}
+
+.filter_toggle_group_boundary p {
+    margin-bottom: 0px;
+    margin-left: 10px;
+}
+
+#list {
+    justify-self: center;
+}
+
+.leaflet-container {
+	min-height: 350px;
+	min-width: 400px;
+
+}
+
+#map {
+    height: 350px;
+    width: 100vw; 
+}
+
+}
+
+
+	</style>
+
+	
+</head>
+<body>
+
+<h1 class="map-title">LA CARTE INTERACTIVE</h1>    
+
+<div class="filter-section">
+
+    <div class="filter_group">
+    
+    <div class="filter_toggle_group_boundary" id="uncheck-all-group">
+      <div class="filter_toggle_group">
+        <label class="switch">
+          <input type="checkbox" id="tout" class="checkbox-input" checked>
+          <span class="slider round" id="tout"></span>
+      </label>
+      </div>
+      <p>Tout déchocher</p>
+    </div>
+
+    <div class="filter_toggle_group_boundary">
+      <div class="filter_toggle_group">
+        <label for="monuments">
+          <img class="filter_img" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Monuments.png">
+        </label> 
+        <label class="switch">
+          <input type="checkbox" id="monuments" class="checkbox-input" checked>
+          <span class="slider round" id="monuments"></span>
+      </label>
+      </div>
+      <p>Monuments</p>
+    </div>
+
+
+    <div class="filter_toggle_group_boundary">
+      <div class="filter_toggle_group">
+        <label for="gallo">
+          <img class="filter_img" src="https://www.sitesdexception.fr/wp-content/uploads/2025/12/romains.png">
+        </label> 
+        <label class="switch">
+          <input type="checkbox" id="gallo" class="checkbox-input" checked>
+          <span class="slider round" id="gallo"></span>
+      </label>
+      </div>
+      <p>Sites et musées Gallo-romains</p>
+    </div>
+
+
+    <div class="filter_toggle_group_boundary">
+      <div class="filter_toggle_group">
+        <label for="musees">
+          <img class="filter_img" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Musees.png">
+        </label> 
+        <label class="switch">
+          <input type="checkbox" id="musees" class="checkbox-input" checked>
+          <span class="slider round" id="musees"></span>
+      </label>
+      </div>
+      <p>Musées d'art et de société</p>
+    </div>
+
+
+      <div class="filter_toggle_group_boundary">
+        <div class="filter_toggle_group">
+          <label for="grotte">
+            <img class="filter_img" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Sites-geologiques.png">
+          </label>
+          <label class="switch">
+            <input type="checkbox" id="grotte" class="checkbox-input" checked>
+            <span class="slider round" id="grotte"></span>
+          </label>
+        </div>
+        <p>Sites géologiques</p>
+      </div>
+    
+    
+    
+      <div class="filter_toggle_group_boundary">
+        <div class="filter_toggle_group">
+          <label for="parc">
+            <img class="filter_img" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Parcs-jardins.png">
+          </label>
+          <label class="switch">
+            <input type="checkbox" id="parc" class="checkbox-input" checked>
+            <span class="slider round" id="parc"></span>
+          </label>
+        </div>
+        <p>Parcs & jardins</p>
+      </div>
+    
+    
+      <div class="filter_toggle_group_boundary">
+        <div class="filter_toggle_group">
+          <label for="vin">
+            <img class="filter_img" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Vin.png">
+          </label>
+          <label class="switch">
+            <input type="checkbox" id="vin" class="checkbox-input" checked>
+            <span class="slider round" id="vin"></span>
+          </label>
+        </div>
+        <p>Vins & savoir-faire</p>
+      </div>
+    
+    
+      <div class="filter_toggle_group_boundary">
+        <div class="filter_toggle_group">
+          <label for="detour">
+            <img class="filter_img" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Ca-vaut-le-detour.png">
+          </label>
+          <label class="switch">
+            <input type="checkbox" id="detour" class="checkbox-input">
+            <span class="slider round" id="detour"></span>
+          </label>
+        </div>
+        <p>Ça vaut le détour</p>
+      </div>
+    
+    
+      <div class="filter_toggle_group_boundary">
+        <div class="filter_toggle_group">
+          <label for="charme">
+            <img class="filter_img" src="https://www.sitesdexception.fr/wp-content/uploads/2025/11/Hebergements.png">
+          </label>
+          <label class="switch">
+            <input type="checkbox" id="charme" class="checkbox-input">
+            <span class="slider round" id="charme"></span>
+          </label>
+        </div>
+        <p>Hébergements de charme</p>
+      </div>
+    
+    </div>
+
+</div> 
+
+<div class="main-section">
+  <div id="map"></div>
+  
+ <div id="list">
+ </div>
+
+</div>
+
+
+
+
+<script>
+
+
+
+  var map = L.map('map').setView([43.6606, 3.4538], 9);
+
+  window.addEventListener("resize", (event) => {
+    if (window.innerWidth < 900) {
+        map.setZoom(8);
+    } else if (window.innerWidth > 900) {
+        map.setZoom(9);
+    }
+  });
+
+  map.locate({maxZoom: 14});
+
+  function onLocationFound(e) {
+
+    L.circle(e.latlng, 600).addTo(map);
+}
+
+map.on('locationfound', onLocationFound);
+
+  const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+		maxZoom: 19,
+		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+}).addTo(map);
+
+var mapIcon = L.Icon.extend({
+    options: {
+    iconSize: [38, 38],
+    iconAnchor: [20, 50],
+    popupAnchor: [0, -42],
+    }
+});
+
+var markerPop = L.Popup.extend({
+    options: {
+      maxHeight: 250,
+      minWidth: 300,
+    }
+});
+
+
+
+function createPopupContent(headerID, title, websiteLink, phone, ticketLink, selLink, siteImage) {
+
+  let content = null;
+
+  if (ticketLink === "no") {
+    content = `
+    <div><h4 class="popup-header" id=${headerID}>${title}</h4></div>
+    <div class="flex-section-div">
+      <div class="flex-section-image-div"><a href="${selLink}"><img src='${siteImage}'></a></div>  
+      <div class="flex-section-text-div">
+        <div class="flex-section-text-div-list-section">
+          <ul>
+          <li>
+          <b>Site internet : </b></br>
+          <a target="_blank" href="https://${websiteLink}">${websiteLink}</a>
+          </li>
+          <li>
+          <b>Téléphone : </b></br>
+          <a href="tel:${phone}">${phone}</a>
+          </li>
+          </ul>
+        </div>
+        <div class="flex-section-text-div-button-section">
+        <a href="${selLink}"><button class="know-more-button">EN SAVOIR+</button></a>
+        </div>
+      </div>  
+    </div>
+    `
+  } else {
+      content = `
+    <div><h4 class="popup-header" id=${headerID}>${title}</h4></div>
+    <div class="flex-section-div">
+      <div class="flex-section-image-div"><a href="${selLink}"><img src='${siteImage}'></a></div>  
+      <div class="flex-section-text-div">
+        <div class="flex-section-text-div-list-section">
+          <ul>
+          <li>
+          <b>Site internet : </b></br>
+          <a target="_blank" href="https://${websiteLink}">${websiteLink}</a>
+          </li>
+          <li>
+          <b>Téléphone : </b></br>
+          <a href="tel:${phone}">${phone}</a>
+          </li>
+          <li>
+          <b>Billetterie en ligne : </b></br>
+          <a href=${ticketLink} target="_blank" class="side-red-button-reservation">Accèder</a>
+          </li>
+          </ul>
+        </div>
+        <div class="flex-section-text-div-button-section">
+        <a href="${selLink}"><button class="know-more-button">EN SAVOIR+</button></a>
+        </div>
+      </div>  
+    </div>
+    `;
+  }
+
+   return content;               
+}
+
+function createSideBar(website, image, name, local, geo) {
+
+    let adjustedName = name.toLowerCase().split(' ').map(word => (word[0].toUpperCase() + word.slice(1))).join(' ');
+
+    let listOfSites = fullArray.filter((website) => website[5] === name);
+
+    let markerTypeArray = [];
+
+    for (const site of listOfSites) {
+       let html = `<img class="filter_img ${site[3]}" src="${site[2]}">`
+       markerTypeArray.push(html);
+    }
+
+    let taxoHTML = markerTypeArray.join(" ");
+  
+
+    let sitesHTML = 
+
+    `<a href="${website}" class="list_item">
+    <div class="row">
+    <div style="background-image: url('${image}')" class="image-section"></div>
+    <div class="content_part">
+        <h4>
+        <span>${adjustedName}</span>
+        <div class="taxonomy_pictos">
+            ${taxoHTML}
+        </div>
+        </h4>
+
+        <div class="bottom_part">
+            <div class="localization_part">
+            <div>
+            <span class="localization">${local}</span>
+            </div>
+            <div>
+            <span class="zone-geo">${geo}</span>
+            </div>
+            </div>
+            </div>
+        </div>
+    </div>
+</a>`
+
+return sitesHTML;
+
+}
+
+
+
+let fullArray = [
+  [43.28026450000001, 3.280872199999976,'https://www.sitesdexception.fr/wp-content/uploads/2025/11/Musees-Goutte.png', "musees-marker", "musee", "MUSÉE RÉGIONAL D'ART CONTEMPORAIN SÉRIGNAN (MRAC)", "mrac.laregion.fr", "04 67 17 88 95", "no", "https://www.sitesdexception.fr/sites/musee-regional-dart-contemporain-occitanie-pyrenees-mediterranee", "https://www.sitesdexception.fr/wp-content/uploads/2018/04/IMG_0826.jpg", "Sérignan", "Béziers – Canal du Midi"],
+  [43.179489192279725, 3.0190783306860656, 'https://www.sitesdexception.fr/wp-content/uploads/2025/12/romains-goutte.png', "gallo-marker", "gallo", "MUSÉE NARBO VIA", "narbovia.fr", "04 68 90 28 90", "https://narbovia.tickeasy.com/fr-FR/accueil", "https://www.sitesdexception.fr/sites/musee-narbo-via/", "https://www.sitesdexception.fr/wp-content/uploads/2023/12/galerie-lapidaire-musee-narbo-via.png", "Narbonne", "Aude"],
+  [43.487293, 3.562322999999992, 'https://www.sitesdexception.fr/wp-content/uploads/2025/11/Goutte-nature-V2-2.png', "parc-marker", "parc", "ABBAYE DE VALMAGNE", "www.valmagne.com", "04 67 78 47 32", "https://www.valmagne.com/evenement/visite-abbaye/", "https://www.sitesdexception.fr/sites/abbaye-de-valmagne/", "https://www.sitesdexception.fr/wp-content/uploads/2018/04/Abbaye_de_Valmagne_Credit_Emidio_Castri-2.jpg", "Villeveyrac", "Autour du Bassin de Thau"],
+  [43.487293, 3.562322999999992, 'https://www.sitesdexception.fr/wp-content/uploads/2025/11/Vin-Goutte.png', "vin-marker", "vin", "ABBAYE DE VALMAGNE", "www.valmagne.com", "04 67 78 47 32", "https://www.valmagne.com/evenement/visite-abbaye/", "https://www.sitesdexception.fr/sites/abbaye-de-valmagne/", "https://www.sitesdexception.fr/wp-content/uploads/2018/04/Abbaye_de_Valmagne_Credit_Emidio_Castri-2.jpg", "Villeveyrac", "Autour du Bassin de Thau"],
+  [43.487293, 3.562322999999992, 'https://www.sitesdexception.fr/wp-content/uploads/2025/11/Monuments-Goutte.png', "monuments-marker", "historical", "ABBAYE DE VALMAGNE", "www.valmagne.com", "04 67 78 47 32", "https://www.valmagne.com/evenement/visite-abbaye/", "https://www.sitesdexception.fr/sites/abbaye-de-valmagne/", "https://www.sitesdexception.fr/wp-content/uploads/2018/04/Abbaye_de_Valmagne_Credit_Emidio_Castri-2.jpg", "Villeveyrac", "Autour du Bassin de Thau"],
+]
+
+
+
+let markerIdAndNameArray = []
+
+let filterSection = document.querySelector('.filter_group');
+
+filterSection.addEventListener("click", (e) => { if (e.target.getAttribute('class') === 'checkbox-input') { dealWithClicks(e) }} );
+
+
+function populateMap() {
+ let activeChecks = getActiveCheckboxes();
+ addMarkersToMap(activeChecks);
+ filterListOfSites(activeChecks);
+}
+
+populateMap();
+
+
+let listOfSites = document.querySelector('#list_container');
+
+function filterListOfSites(activeChecks) {
+let sites = document.querySelectorAll('.list_item');
+for (const site of sites) {
+    let inner = site.innerHTML;
+    let display = false;
+    for (const check of activeChecks) {
+      let doesItHaveCheck = inner.includes(check);
+      if (doesItHaveCheck) {
+        display = true;
+      }
+    }
+    if (display) {
+        site.style.display = "block";
+    } else if (!display) {
+        site.style.display = "none";
+    }
+}
+
+}
+
+
+
+function addMarkersToMap(activeChecks) {
+  markerIdAndNameArray = [];
+  let arrayOfSideBarSites = [];
+  for (const marker of fullArray) {
+    let currentMarker = marker;
+    let markerIcon = new mapIcon({iconUrl: currentMarker[2], className: currentMarker[3]});
+    let markerClassName = markerIcon.options.className;
+    let markerTitle = currentMarker[5];
+    let markerPopup = new markerPop({content: createPopupContent(currentMarker[4], markerTitle, currentMarker[6], currentMarker[7], currentMarker[8], currentMarker[9], currentMarker[10])});
+
+   if (activeChecks.includes(markerClassName)) {
+      let markerToBePutOntoMap = L.marker([currentMarker[0], currentMarker[1]], {icon: markerIcon}).bindPopup(markerPopup);
+      let markerContent = markerToBePutOntoMap._popup.options.content;
+      markerToBePutOntoMap.addTo(map);
+
+      let adjustedName = markerTitle.toLowerCase().split(' ').map(word => (word[0].toUpperCase() + word.slice(1))).join(' ');
+
+      let alreadyAddedToSideBar = false
+
+      if (arrayOfSideBarSites.length !== 0) {
+        for (const item of arrayOfSideBarSites) {
+          if (item.includes(adjustedName)) {
+            alreadyAddedToSideBar = true;
+            console.log(alreadyAddedToSideBar);
+          }
+        }
+      };
+
+      if (!alreadyAddedToSideBar) {
+            let sideBarSite = createSideBar(currentMarker[9], currentMarker[10], markerTitle, currentMarker[11], currentMarker[12]);
+            console.log("how many times");
+            arrayOfSideBarSites.push(sideBarSite);
+            console.log(sideBarSite);
+            console.log(arrayOfSideBarSites);
+      }
+      
+    };
+}
+        let fullHTMLForSideBar = arrayOfSideBarSites.join(" ");
+        let container = document.getElementById('list');
+        let newDiv = document.createElement("div");
+        newDiv.innerHTML = fullHTMLForSideBar;
+        newDiv.id = "list_container";
+        container.appendChild(newDiv);
+
+        arrayOfSideBarSites = [];
+
+
+function groupById(array) {
+  return array.reduce((obj, value) => {
+    obj[value.markerTitle] = value;
+    return obj;
+  }, {});
+}
+  }
+
+
+function getActiveCheckboxes() {
+ let checkboxes = document.querySelectorAll('input[type="checkbox"]');
+ let activeCheckBoxArray = [];
+
+
+ for (const checkbox of checkboxes) {
+  if (checkbox.checked) {
+    activeCheckBoxArray.push(`${checkbox.id}-marker`);
+  }
+ }
+ return activeCheckBoxArray;
+}
+
+
+function dealWithClicks(e) {
+
+  if (e.target.id === 'tout') {
+    let allCheckboxes = document.querySelectorAll('input[type="checkbox"]');
+    let isToutButtonChecked = e.target.checked ? true : false;
+    if (isToutButtonChecked) {
+     for (const checkbox of allCheckboxes) {
+      if (!checkbox.checked) {
+        checkbox.click();
+      };
+    }
+    } else if (!isToutButtonChecked) {
+      for (const checkbox of allCheckboxes) {
+        if (checkbox.checked) {
+          checkbox.click();
+        }
+      }
+    }
+
+  }
+
+  removeMarkers();
+  populateMap();
+}
+
+
+function removeMarkers() {
+  let markers = document.querySelectorAll('.leaflet-marker-icon');
+  if (markers.length > 0) {
+    for (const marker of markers) {
+      marker.remove();
+    }
+    }
+}
+
+let leafletMarkersForClickStyling = document.querySelectorAll('.leaflet-marker-icon');
+
+for (const leafletMarker of leafletMarkersForClickStyling) {
+  let currentStyle = leafletMarker.getAttribute("style");
+  leafletMarker.setAttribute("style", `${currentStyle} border-radius: 90%`);
+  let newStyleNow = leafletMarker.getAttribute("style");
+}
+
+
+
+listOfSites.addEventListener('mouseover', popUpMarkerBasedOnListHover);
+listOfSites.addEventListener('mouseleave', resetTheMapAfterMouseLeaveEvent);
+
+function resetTheMapAfterMouseLeaveEvent() {
+    removeMarkers();
+    populateMap();
+};
+
+function popUpMarkerBasedOnListHover(e) {
+    window.dispatchEvent(new Event("resize"));
+    if (e.target.parentElement.className === 'row') {
+        let rowElement = e.target.parentElement;
+        let titleSelector = rowElement.querySelector('h4 > span');
+        let title = titleSelector.innerText;
+        let titleToUpperCase = title.toUpperCase().trim();
+        let titleInBrackets = titleToUpperCase;
+
+         removeMarkers();
+         let activeCheckBoxes = getActiveCheckboxes();
+
+         let markerAdded = false;
+      
+        for (const marker of fullArray) {
+            if (marker[5] === titleInBrackets) {
+                    let currentMarker = marker;
+                    let markerIcon = new mapIcon({iconUrl: currentMarker[2], className: currentMarker[3]});
+                    let markerClassName = markerIcon.options.className;
+                    let markerTitle = currentMarker[5];
+                if (activeCheckBoxes.includes(theMarkerClassName)) {
+                    let markerForMap = L.marker([currentMarker[0], currentMarker[1]], {icon: markerIcon}).bindPopup(markerPopup);
+                    markerForMap.addTo(map);
+                    markerAdded = true;
+                     var latLngs = [ markerForMap.getLatLng() ];
+                     let lat = latLngs[0].lat;
+                     let long = latLngs[0].lng;
+                     map.panTo([lat, long]);               
+                }
+            }
+        }
+
+        if (!markerAdded) {
+            let clusterPointsToArray = Object.keys(clusterPoints);
+            clusterPointsToArray.forEach(cluster => {
+                for (var i = 0; i <clusterPoints[cluster].length; i++) {
+                    var a = clusterPoints[cluster][i];
+                    var markerIcon = a[2];
+                    var className = markerIcon.options.className;
+
+                    if (activeCheckBoxes.includes(className) && a[4] === titleInBrackets) {
+                      var marker = L.marker([a[0], a[1]], {icon: markerIcon}).bindPopup(a[3]);
+                      marker.addTo(map);
+                      markerAdded = true;
+                      var latLngs = marker.getLatLng();
+                      let lat = latLngs.lat;
+                      let long = latLngs.lng;
+                      map.panTo([lat, long]);
+                    };
+  };
+                
+            });
+        }
+    }
+
+
+
+}
+
+setTimeout(function () {
+   window.dispatchEvent(new Event("resize"));
+}, 2000);
+
+</script>
+
+
+
+</body>
+</html>
