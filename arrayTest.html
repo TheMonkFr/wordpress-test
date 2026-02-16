@@ -764,7 +764,23 @@ for (const site of sites) {
 function addMarkersToMap(activeChecks) {
   markerIdAndNameArray = [];
   let arrayOfSideBarSites = [];
-  for (const marker of fullArray) {
+  
+  let sortedArray = fullArray.sort((a, b) => {
+  const nameA = a[5].toUpperCase(); // ignore upper and lowercase
+  const nameB = b[5].toUpperCase(); // ignore upper and lowercase
+  if (nameA < nameB) {
+    return -1;
+  }
+  if (nameA > nameB) {
+    return 1;
+  }
+
+  // names must be equal
+  return 0;
+});
+
+
+  for (const marker of sortedArray) {
     let currentMarker = marker;
     let markerIcon = new mapIcon({iconUrl: currentMarker[2], className: currentMarker[3]});
     let markerClassName = markerIcon.options.className;
@@ -784,17 +800,13 @@ function addMarkersToMap(activeChecks) {
         for (const item of arrayOfSideBarSites) {
           if (item.includes(adjustedName)) {
             alreadyAddedToSideBar = true;
-            console.log(alreadyAddedToSideBar);
           }
         }
       };
 
       if (!alreadyAddedToSideBar) {
             let sideBarSite = createSideBar(currentMarker[9], currentMarker[10], markerTitle, currentMarker[11], currentMarker[12]);
-            console.log("how many times");
             arrayOfSideBarSites.push(sideBarSite);
-            console.log(sideBarSite);
-            console.log(arrayOfSideBarSites);
       }
       
     };
@@ -905,7 +917,8 @@ function popUpMarkerBasedOnListHover(e) {
                     let markerIcon = new mapIcon({iconUrl: currentMarker[2], className: currentMarker[3]});
                     let markerClassName = markerIcon.options.className;
                     let markerTitle = currentMarker[5];
-                if (activeCheckBoxes.includes(theMarkerClassName)) {
+                    let markerPopup = new markerPop({content: createPopupContent(currentMarker[4], markerTitle, currentMarker[6], currentMarker[7], currentMarker[8], currentMarker[9], currentMarker[10])});
+                if (activeCheckBoxes.includes(markerClassName)) {
                     let markerForMap = L.marker([currentMarker[0], currentMarker[1]], {icon: markerIcon}).bindPopup(markerPopup);
                     markerForMap.addTo(map);
                     markerAdded = true;
