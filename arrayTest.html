@@ -739,8 +739,6 @@ function populateMap() {
 populateMap();
 
 
-let listOfSites = document.querySelector('#list_container');
-
 function filterListOfSites(activeChecks) {
 let sites = document.querySelectorAll('.list_item');
 for (const site of sites) {
@@ -767,6 +765,12 @@ function addMarkersToMap(activeChecks) {
   markerIdAndNameArray = [];
   let arrayOfSideBarSites = [];
   let pageSpecificArrayOfSideBarSites = [];
+
+ let listContainer = document.querySelector('#list_container');
+
+ if (listContainer) {
+  listContainer.remove();
+ }
   
   let sortedArray = fullArray.sort((a, b) => {
   const nameA = a[5].toUpperCase(); // ignore upper and lowercase
@@ -783,7 +787,7 @@ function addMarkersToMap(activeChecks) {
 });
 
 
- if (window.location.href !== "bbc.co.uk") {
+ if (window.location.href !== "file:///Users/chrismonk/repos/wordpress-local-plugin-test/arrayTest.html") {
         let currentURL = window.location.href;
         for (const marker of fullArray) {
           if (currentURL === marker[13]) {
@@ -846,6 +850,11 @@ function addMarkersToMap(activeChecks) {
 
         arrayOfSideBarSites = [];
 
+        let listOfSites = document.querySelector('#list_container');
+
+        listOfSites.addEventListener('mouseover', popUpMarkerBasedOnListHover);
+        listOfSites.addEventListener('mouseleave', resetTheMapAfterMouseLeaveEvent);
+
 
 function groupById(array) {
   return array.reduce((obj, value) => {
@@ -854,6 +863,8 @@ function groupById(array) {
   }, {});
 }
   }
+
+
 
 
 function getActiveCheckboxes() {
@@ -915,8 +926,7 @@ for (const leafletMarker of leafletMarkersForClickStyling) {
 
 
 
-listOfSites.addEventListener('mouseover', popUpMarkerBasedOnListHover);
-listOfSites.addEventListener('mouseleave', resetTheMapAfterMouseLeaveEvent);
+
 
 function resetTheMapAfterMouseLeaveEvent() {
     removeMarkers();
