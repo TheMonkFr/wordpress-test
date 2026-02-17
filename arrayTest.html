@@ -712,11 +712,13 @@ return sitesHTML;
 
 
 let fullArray = [
-  [43.28026450000001, 3.280872199999976,'https://www.sitesdexception.fr/wp-content/uploads/2025/11/Musees-Goutte.png', "musees-marker", "musee", "MUSÉE RÉGIONAL D'ART CONTEMPORAIN SÉRIGNAN (MRAC)", "mrac.laregion.fr", "04 67 17 88 95", "no", "https://www.sitesdexception.fr/sites/musee-regional-dart-contemporain-occitanie-pyrenees-mediterranee", "https://www.sitesdexception.fr/wp-content/uploads/2018/04/IMG_0826.jpg", "Sérignan", "Béziers – Canal du Midi"],
+  [43.28026450000001, 3.280872199999976,'https://www.sitesdexception.fr/wp-content/uploads/2025/11/Musees-Goutte.png', "musees-marker", "musee", "MUSÉE RÉGIONAL D'ART CONTEMPORAIN SÉRIGNAN (MRAC)", "mrac.laregion.fr", "04 67 17 88 95", "no", "https://www.sitesdexception.fr/sites/musee-regional-dart-contemporain-occitanie-pyrenees-mediterranee", "https://www.sitesdexception.fr/wp-content/uploads/2018/04/IMG_0826.jpg", "Sérignan", "Béziers – Canal du Midi", "file:///Users/chrismonk/repos/wordpress-local-plugin-test/arrayTest.html", "LA CITÉ DE PIERRES", "GROTTE DE LA SALAMANDRE"],
   [43.179489192279725, 3.0190783306860656, 'https://www.sitesdexception.fr/wp-content/uploads/2025/12/romains-goutte.png', "gallo-marker", "gallo", "MUSÉE NARBO VIA", "narbovia.fr", "04 68 90 28 90", "https://narbovia.tickeasy.com/fr-FR/accueil", "https://www.sitesdexception.fr/sites/musee-narbo-via/", "https://www.sitesdexception.fr/wp-content/uploads/2023/12/galerie-lapidaire-musee-narbo-via.png", "Narbonne", "Aude"],
   [43.487293, 3.562322999999992, 'https://www.sitesdexception.fr/wp-content/uploads/2025/11/Goutte-nature-V2-2.png', "parc-marker", "parc", "ABBAYE DE VALMAGNE", "www.valmagne.com", "04 67 78 47 32", "https://www.valmagne.com/evenement/visite-abbaye/", "https://www.sitesdexception.fr/sites/abbaye-de-valmagne/", "https://www.sitesdexception.fr/wp-content/uploads/2018/04/Abbaye_de_Valmagne_Credit_Emidio_Castri-2.jpg", "Villeveyrac", "Autour du Bassin de Thau"],
   [43.487293, 3.562322999999992, 'https://www.sitesdexception.fr/wp-content/uploads/2025/11/Vin-Goutte.png', "vin-marker", "vin", "ABBAYE DE VALMAGNE", "www.valmagne.com", "04 67 78 47 32", "https://www.valmagne.com/evenement/visite-abbaye/", "https://www.sitesdexception.fr/sites/abbaye-de-valmagne/", "https://www.sitesdexception.fr/wp-content/uploads/2018/04/Abbaye_de_Valmagne_Credit_Emidio_Castri-2.jpg", "Villeveyrac", "Autour du Bassin de Thau"],
   [43.487293, 3.562322999999992, 'https://www.sitesdexception.fr/wp-content/uploads/2025/11/Monuments-Goutte.png', "monuments-marker", "historical", "ABBAYE DE VALMAGNE", "www.valmagne.com", "04 67 78 47 32", "https://www.valmagne.com/evenement/visite-abbaye/", "https://www.sitesdexception.fr/sites/abbaye-de-valmagne/", "https://www.sitesdexception.fr/wp-content/uploads/2018/04/Abbaye_de_Valmagne_Credit_Emidio_Castri-2.jpg", "Villeveyrac", "Autour du Bassin de Thau"],
+  [44.13694381713867, 3.2027781009674072, 'https://www.sitesdexception.fr/wp-content/uploads/2025/11/Sites-geologique-Goutte.png', "grotte-marker", "grotte", "LA CITÉ DE PIERRES", "lacitedepierres.com", "05 65 60 66 30", "https://lacitedepierres.com/?g-path=%2Fcart%2Factivities%2Fundefined", "https://www.sitesdexception.fr/sites/cite-de-pierres", "https://www.sitesdexception.fr/wp-content/uploads/2020/03/IMG_2353-HDR.jpg", "Montpellier-le-Vieux", "Entre Plaine et Causse"],
+  [44.2446149,4.3481103, 'https://www.sitesdexception.fr/wp-content/uploads/2025/11/Sites-geologique-Goutte.png', "grotte-marker", "grotte", "GROTTE DE LA SALAMANDRE", "www.grottedelasalamandre.com/fr/", "04 66 60 0 60 0", "https://www.grottedelasalamandre.com/fr/la-visite-guidee/", "https://www.sitesdexception.fr/sites/grotte-de-la-salamandre/", "https://www.sitesdexception.fr/wp-content/uploads/2020/01/IMG_6946.jpg", "Méjannes-le-Clap", "Gard Cévennes"],
 ]
 
 
@@ -729,9 +731,9 @@ filterSection.addEventListener("click", (e) => { if (e.target.getAttribute('clas
 
 
 function populateMap() {
- let activeChecks = getActiveCheckboxes();
- addMarkersToMap(activeChecks);
- filterListOfSites(activeChecks);
+  let activeChecks = getActiveCheckboxes();
+  addMarkersToMap(activeChecks);
+  filterListOfSites(activeChecks);
 }
 
 populateMap();
@@ -764,6 +766,7 @@ for (const site of sites) {
 function addMarkersToMap(activeChecks) {
   markerIdAndNameArray = [];
   let arrayOfSideBarSites = [];
+  let pageSpecificArrayOfSideBarSites = [];
   
   let sortedArray = fullArray.sort((a, b) => {
   const nameA = a[5].toUpperCase(); // ignore upper and lowercase
@@ -780,6 +783,22 @@ function addMarkersToMap(activeChecks) {
 });
 
 
+ if (window.location.href !== "bbc.co.uk") {
+        let currentURL = window.location.href;
+        for (const marker of fullArray) {
+          if (currentURL === marker[13]) {
+             let arrayLength = marker.length;
+             let startingPointOfPageSpecificSites = 14;
+             for (let i = 14; i < arrayLength; i++) {
+              pageSpecificArrayOfSideBarSites.push(marker[i]);
+             }
+          };
+        }
+        console.log(pageSpecificArrayOfSideBarSites);
+
+      }
+
+
   for (const marker of sortedArray) {
     let currentMarker = marker;
     let markerIcon = new mapIcon({iconUrl: currentMarker[2], className: currentMarker[3]});
@@ -794,9 +813,15 @@ function addMarkersToMap(activeChecks) {
 
       let adjustedName = markerTitle.toLowerCase().split(' ').map(word => (word[0].toUpperCase() + word.slice(1))).join(' ');
 
-      let alreadyAddedToSideBar = false
+      let alreadyAddedToSideBar = false;
 
-      if (arrayOfSideBarSites.length !== 0) {
+      if (pageSpecificArrayOfSideBarSites.length !==0) {
+         if (pageSpecificArrayOfSideBarSites.includes(markerTitle)) {
+            let sideBarSite = createSideBar(currentMarker[9], currentMarker[10], markerTitle, currentMarker[11], currentMarker[12]);
+            arrayOfSideBarSites.push(sideBarSite);
+         }
+      } else if (pageSpecificArrayOfSideBarSites.length === 0) {
+           if (arrayOfSideBarSites.length !== 0) {
         for (const item of arrayOfSideBarSites) {
           if (item.includes(adjustedName)) {
             alreadyAddedToSideBar = true;
@@ -807,6 +832,7 @@ function addMarkersToMap(activeChecks) {
       if (!alreadyAddedToSideBar) {
             let sideBarSite = createSideBar(currentMarker[9], currentMarker[10], markerTitle, currentMarker[11], currentMarker[12]);
             arrayOfSideBarSites.push(sideBarSite);
+      }
       }
       
     };
